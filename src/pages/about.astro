@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import Signup from '../components/Signup.astro';
+---
+
+<Base title="About" description="Why Fridge First exists, and how the recipes are made.">
+  <article class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">About</p>
+      <h1>Hi, I'm Shreya.</h1>
+    </header>
+    <div class="prose">
+      <p class="lede">
+        I'm a data scientist and a working mom, and Sunday is the one day I cook properly. Fridge First is where I write
+        those Sundays down.
+      </p>
+      <p>
+        Every prep starts with what's already in the fridge and pantry, not a shopping list. I plan around the week
+        ahead — guests, festivals, late meetings — then cook everything in one session, with the oven, stovetop and
+        Instant Pot running at once.
+      </p>
+      <h2>How recipes are written</h2>
+      <ul>
+        <li>Every recipe has been cooked, packed and reheated across a real week.</li>
+        <li>Each one says how long it keeps in the fridge, whether it freezes, and how to reheat it.</li>
+        <li>Nutrition, where shown, is an estimate from USDA FoodData Central. It's labeled that way on purpose.</li>
+        <li>When a recipe is inspired by someone else's, it's rewritten in my own words and credited.</li>
+      </ul>
+      <h2>What's next</h2>
+      <p>
+        Every recipe here is stored as structured data: ingredients, portions, storage and tags. That's on purpose. I'm
+        building a "reverse recipe" assistant: tell it (or show it) what's in your fridge, and it plans your Sunday prep.
+      </p>
+      <p>Say hi at <a href="mailto:fridgefirst.prep@gmail.com">fridgefirst.prep@gmail.com</a> or on <a href="https://www.pinterest.com/fridgefirstprep/">Pinterest</a>.</p>
+    </div>
+    <div style="margin-top: 56px"><Signup /></div>
+  </article>
+</Base>
+
+<style>
+  .page-head { padding: 48px 0 8px; }
+</style>

@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import PrepCard from '../../components/PrepCard.astro';
+import { getPreps } from '../../lib/content';
+
+const preps = await getPreps();
+---
+
+<Base title="Sunday preps" description="Full Sunday meal-prep sessions: the week's menu, the cooking order, and what goes in the fridge vs. the freezer.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">{preps.length} {preps.length === 1 ? 'prep' : 'preps'}</p>
+      <h1>Sunday preps</h1>
+      <p class="lede">A whole week at a time: the menu, a minute-by-minute cooking order, and which container goes in the fridge or freezer.</p>
+    </header>
+    <div class="list">
+      {preps.map((p, i) => <PrepCard prep={p} large={i === 0} />)}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page-head { padding: 48px 0 24px; }
+  .list { display: grid; gap: 16px; }
+</style>

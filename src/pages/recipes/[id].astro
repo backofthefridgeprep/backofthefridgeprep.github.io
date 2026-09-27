@@ -1,0 +1,229 @@
+---
+import Base from '../../layouts/Base.astro';
+import { render, getEntry } from 'astro:content';
+import { getRecipes, formatMinutes, totalMinutes, isoDuration, dietLabel, formatDate } from '../../lib/content';
+import type { Recipe } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const recipes = await getRecipes();
+  return recipes.map((recipe) => ({ params: { id: recipe.id }, props: { recipe } }));
+}
+
+interface Props { recipe: Recipe }
+const { recipe } = Astro.props;
+const d = recipe.data;
+const { Content } = await render(recipe);
+
+const prepEntry = d.prep ? await getEntry(d.prep) : undefined;
+const prep = prepEntry && (import.meta.env.DEV || !prepEntry.data.draft) ? prepEntry : undefined;
+
+const total = totalMinutes(recipe);
+const facts = [
+  { k: 'Prep', v: formatMinutes(d.prepMinutes) },
+  { k: 'Cook', v: formatMinutes(d.cookMinutes) },
+  { k: 'Makes', v: d.servings ? `${d.servings} servings` : undefined },
+  { k: 'Fridge', v: d.storage?.fridgeDays ? `${d.storage.fridgeDays} days` : undefined },
+  { k: 'Freezer', v: d.storage ? (d.storage.freezer ? (d.storage.freezerMonths ? `${d.storage.freezerMonths} months` : 'Yes') : 'No') : undefined },
+].filter((f) => f.v);
+
+const ingredientText = (i: { item: string; amount?: string; note?: string }) =>
+  [i.amount, i.item].filter(Boolean).join(' ') + (i.note ? `, ${i.note}` : '');
+
+// schema.org Recipe — used by Google and by Pinterest rich pins.
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': d.kind === 'technique' ? 'HowTo' : 'Recipe',
+  name: d.title,
+  description: d.description,
+  datePublished: d.date.toISOString().slice(0, 10),
+  author: { '@type': 'Person', name: 'Shreya' },
+  publisher: { '@type': 'Organization', name: 'Fridge First' },
+  ...(d.kind === 'recipe' && {
+    recipeCuisine: d.cuisine.join(', ') || undefined,
+    recipeCategory: d.course.join(', ') || undefined,
+    keywords: d.tags.join(', '),
+    recipeYield: d.servings ? `${d.servings} servings` : undefined,
+    prepTime: isoDuration(d.prepMinutes),
+    cookTime: isoDuration(d.cookMinutes),
+    totalTime: isoDuration(total),
+    recipeIngredient: d.ingredients.flatMap((g) => g.items.map(ingredientText)),
+    suitableForDiet: d.diet.includes('vegan')
+      ? 'https://schema.org/VeganDiet'
+      : d.diet.includes('vegetarian')
+        ? 'https://schema.org/VegetarianDiet'
+        : undefined,
+    nutrition: d.nutrition
+      ? {
+          '@type': 'NutritionInformation',
+          calories: `${d.nutrition.perServing.calories} calories`,
+          proteinContent: `${d.nutrition.perServing.proteinG} g`,
+          carbohydrateContent: `${d.nutrition.perServing.carbsG} g`,
+          fatContent: `${d.nutrition.perServing.fatG} g`,
+        }
+      : undefined,
+  }),
+};
+---
+
+<Base title={d.title} description={d.description} jsonLd={jsonLd}>
+  <article class="wrap recipe">
+    <header class="rhead">
+      <p class="eyebrow">
+        {d.kind === 'technique' ? 'Technique' : 'Recipe'}
+        {d.cuisine.length > 0 && ` · ${d.cuisine.join(' · ')}`}
+        {d.draft && ' · Draft (not published)'}
+      </p>
+      <h1>{d.title}</h1>
+      <p class="lede">{d.description}</p>
+      <div class="chips">
+        {d.diet.map((x) => <span class={`chip ${x.startsWith('contains') ? 'tomato' : 'basil'}`}>{dietLabel[x]}</span>)}
+        {d.storage?.freezer && <span class="chip frost">Freezes well</span>}
+      </div>
+      {
+        facts.length > 0 && (
+          <dl class="facts">
+            {facts.map((f) => (
+              <div>
+                <dt>{f.k}</dt>
+                <dd>{f.v}</dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
+      {d.servingNote && <p class="snote">{d.servingNote}</p>}
+    </header>
+
+    <div class="layout">
+      {
+        d.ingredients.length > 0 && (
+          <aside class="ingredients" aria-labelledby="ing-h">
+            <h2 id="ing-h">Ingredients</h2>
+            <p class="hint">Tap to tick off as you pull things out.</p>
+            {d.ingredients.map((g, gi) => (
+              <div class="igroup">
+                {g.group && <h3>{g.group}</h3>}
+                <ul>
+                  {g.items.map((i, ii) => (
+                    <li>
+                      <label>
+                        <input type="checkbox" id={`i-${gi}-${ii}`} />
+                        <span>
+                          {i.amount && <strong>{i.amount}</strong>} {i.item}
+                          {i.optional && <em class="opt"> (optional)</em>}
+                          {i.note && <span class="inote">{i.note}</span>}
+                        </span>
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            {d.equipment.length > 0 && (
+              <div class="igroup">
+                <h3>Equipment</h3>
+                <p class="equip">{d.equipment.join(' · ')}</p>
+              </div>
+            )}
+          </aside>
+        )
+      }
+
+      <div class="method">
+        <h2 class="method-h">{d.kind === 'technique' ? 'How to' : 'Method'}</h2>
+        <div class="prose"><Content /></div>
+
+        {
+          (d.storage || d.reheat) && (
+            <section class="box frost-box">
+              <h3>Storing and reheating</h3>
+              {d.storage?.notes && <p>{d.storage.notes}</p>}
+              {d.reheat && <p>{d.reheat}</p>}
+              <p class="small">Cool food and get it into the fridge or freezer within 2 hours of cooking.</p>
+            </section>
+          )
+        }
+
+        {
+          d.forLittleOnes && (
+            <section class="box turmeric-box">
+              <h3>For little ones</h3>
+              <p>{d.forLittleOnes}</p>
+            </section>
+          )
+        }
+
+        {
+          d.nutrition && (
+            <section class="box">
+              <h3>Nutrition per serving <span class="chip">estimated</span></h3>
+              <dl class="nutri">
+                <div><dt>Calories</dt><dd>{d.nutrition.perServing.calories}</dd></div>
+                <div><dt>Protein</dt><dd>{d.nutrition.perServing.proteinG} g</dd></div>
+                <div><dt>Carbs</dt><dd>{d.nutrition.perServing.carbsG} g</dd></div>
+                <div><dt>Fat</dt><dd>{d.nutrition.perServing.fatG} g</dd></div>
+                {d.nutrition.perServing.fiberG !== undefined && <div><dt>Fiber</dt><dd>{d.nutrition.perServing.fiberG} g</dd></div>}
+                {d.nutrition.perServing.sodiumMg !== undefined && <div><dt>Sodium</dt><dd>{d.nutrition.perServing.sodiumMg} mg</dd></div>}
+              </dl>
+              <p class="small">Estimated from {d.nutrition.source}. Not medical advice.</p>
+            </section>
+          )
+        }
+
+        {
+          prep && (
+            <p class="from-prep">
+              Part of the Sunday prep <a href={`/preps/${prep.id}/`}>{prep.data.title}</a> ({formatDate(prep.data.date)}).
+            </p>
+          )
+        }
+        {d.source.kind === 'adapted' && d.source.credit && (
+          <p class="from-prep">
+            Adapted from {d.source.url ? <a href={d.source.url}>{d.source.credit}</a> : d.source.credit}.
+          </p>
+        )}
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .rhead { padding: 48px 0 12px; max-width: 48em; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 22px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 0; margin: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--card); width: fit-content; max-width: 100%; }
+  .facts div { padding: 10px 18px; border-right: 1px solid var(--line); }
+  .facts div:last-child { border-right: 0; }
+  .facts dt { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+  .facts dd { margin: 0; font-weight: 600; }
+  .snote { margin: 10px 0 0; color: var(--ink-3); font-size: 0.9rem; }
+
+  .layout { display: grid; gap: 40px; margin-top: 32px; }
+  @media (min-width: 900px) { .layout { grid-template-columns: minmax(300px, 380px) 1fr; gap: 56px; } }
+
+  .ingredients { align-self: start; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  @media (min-width: 900px) { .ingredients { position: sticky; top: 84px; max-height: calc(100vh - 100px); overflow-y: auto; } }
+  .ingredients h2 { margin: 0 0 2px; font-size: 1.4rem; }
+  .hint { font-size: 0.82rem; color: var(--ink-3); margin: 0 0 12px; }
+  .igroup h3 { font-family: var(--sans); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--turmeric); margin: 18px 0 6px; }
+  .igroup ul { list-style: none; padding: 0; margin: 0; }
+  .igroup li { border-bottom: 1px dashed var(--line); }
+  .igroup li:last-child { border-bottom: 0; }
+  label { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; cursor: pointer; font-size: 0.95rem; line-height: 1.4; }
+  input[type='checkbox'] { accent-color: var(--basil); width: 17px; height: 17px; margin-top: 2px; flex: none; }
+  input:checked + span { color: var(--ink-3); text-decoration: line-through; }
+  .inote { display: block; font-size: 0.82rem; color: var(--ink-3); }
+  .opt { color: var(--ink-3); font-style: normal; font-size: 0.85rem; }
+  .equip { font-size: 0.9rem; color: var(--ink-2); margin: 0; }
+
+  .method-h { margin-top: 0; }
+  .box { margin-top: 28px; padding: 20px 22px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--card); max-width: 42em; }
+  .box h3 { margin-bottom: 8px; display: flex; gap: 10px; align-items: center; }
+  .box p { margin-bottom: 0.5em; }
+  .frost-box { background: var(--frost-soft); border-color: transparent; }
+  .turmeric-box { background: var(--turmeric-soft); border-color: transparent; }
+  .small { font-size: 0.82rem; color: var(--ink-3); }
+  .nutri { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 6px 0 10px; }
+  .nutri dt { font-size: 0.75rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .nutri dd { margin: 0; font-weight: 600; }
+  .from-prep { margin-top: 28px; color: var(--ink-2); font-size: 0.95rem; }
+</style>

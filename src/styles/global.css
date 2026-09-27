@@ -1,0 +1,151 @@
+/* Fridge First — base styles.
+   Palette: paper, ink, basil, turmeric, tomato. Tokens redefined for dark mode. */
+
+:root {
+  --paper: #fbf7f0;
+  --paper-2: #f3ecdf;
+  --card: #fffdf9;
+  --ink: #1f2a24;
+  --ink-2: #4d5a52;
+  --ink-3: #7a857e;
+  --line: #e4dccd;
+  --basil: #2f5d46;
+  --basil-soft: #e3ece5;
+  --turmeric: #c98e12;
+  --turmeric-soft: #f6ead0;
+  --tomato: #b9472f;
+  --tomato-soft: #f5e1da;
+  --frost: #3a6a8a;
+  --frost-soft: #e1ebf1;
+
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --radius: 14px;
+  --wrap: 1120px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #151a17;
+    --paper-2: #1c231f;
+    --card: #1e2521;
+    --ink: #eee9df;
+    --ink-2: #c1c0b6;
+    --ink-3: #8f958d;
+    --line: #333c36;
+    --basil: #8cc4a2;
+    --basil-soft: #23352b;
+    --turmeric: #e6b54a;
+    --turmeric-soft: #3a3120;
+    --tomato: #ec8a72;
+    --tomato-soft: #3b2622;
+    --frost: #8fbcd9;
+    --frost-soft: #1f3040;
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--basil); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5em;
+  font-variation-settings: 'opsz' 72;
+}
+h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); }
+h2 { font-size: clamp(1.45rem, 3vw, 1.85rem); margin-top: 1.8em; }
+h3 { font-size: 1.2rem; }
+
+p { margin: 0 0 1em; }
+
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 16px; }
+@media (min-width: 720px) { .wrap { padding: 0 28px; } }
+
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.lede { font-size: 1.15rem; color: var(--ink-2); max-width: 40em; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.18em 0.65em;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: var(--paper-2);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.chip.basil { background: var(--basil-soft); color: var(--basil); }
+.chip.turmeric { background: var(--turmeric-soft); color: var(--turmeric); }
+.chip.tomato { background: var(--tomato-soft); color: var(--tomato); }
+.chip.frost { background: var(--frost-soft); color: var(--frost); }
+
+.btn {
+  display: inline-block;
+  padding: 0.7em 1.2em;
+  border-radius: 10px;
+  background: var(--basil);
+  color: var(--paper);
+  font-weight: 600;
+  text-decoration: none;
+  border: 0;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover { filter: brightness(1.08); }
+
+.grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+}
+
+/* Prose from Markdown bodies */
+.prose { max-width: 42em; }
+.prose ol, .prose ul { padding-left: 1.3em; }
+.prose li { margin-bottom: 0.55em; }
+.prose ol > li::marker { font-family: var(--serif); font-weight: 600; color: var(--turmeric); }
+.prose h2 { font-size: 1.4rem; }
+.prose table { border-collapse: collapse; width: 100%; font-size: 0.95rem; margin: 1em 0 1.5em; display: block; overflow-x: auto; }
+.prose th, .prose td { text-align: left; padding: 0.5em 0.8em 0.5em 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.prose th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; border-radius: 4px; }

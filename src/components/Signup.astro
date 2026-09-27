@@ -1,0 +1,59 @@
+---
+// Email signup. Until a newsletter service is chosen, set nothing and the form
+// falls back to a pre-filled email to fridgefirst.prep@gmail.com.
+// Later: set PUBLIC_SIGNUP_ACTION (e.g. a Buttondown or Kit form URL) as a
+// GitHub Actions variable and the form posts there instead.
+const action = import.meta.env.PUBLIC_SIGNUP_ACTION as string | undefined;
+const mailto =
+  'mailto:fridgefirst.prep@gmail.com?subject=' +
+  encodeURIComponent('Add me to the Fridge First list') +
+  '&body=' +
+  encodeURIComponent('Hi! Please send me the weekly Sunday prep.');
+---
+
+<section class="signup" aria-labelledby="signup-h">
+  <div>
+    <h2 id="signup-h">One Sunday prep in your inbox each week</h2>
+    <p>The plan, the shopping list and the cooking order. Nothing else.</p>
+  </div>
+  {
+    action ? (
+      <form method="post" action={action} class="form">
+        <label class="visually-hidden" for="signup-email">Email address</label>
+        <input id="signup-email" type="email" name="email" required placeholder="you@example.com" autocomplete="email" />
+        <button class="btn" type="submit">Sign up</button>
+      </form>
+    ) : (
+      <div class="form">
+        <a class="btn" href={mailto}>Get on the list</a>
+        <span class="note">Opens an email — the list is small and handmade for now.</span>
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .signup {
+    display: grid;
+    gap: 16px 32px;
+    align-items: center;
+    padding: 28px;
+    border-radius: var(--radius);
+    background: var(--turmeric-soft);
+    border: 1px solid var(--line);
+  }
+  @media (min-width: 820px) { .signup { grid-template-columns: 1.3fr 1fr; padding: 36px 40px; } }
+  h2 { margin: 0 0 6px; font-size: 1.5rem; }
+  p { margin: 0; color: var(--ink-2); }
+  .form { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  input {
+    flex: 1 1 200px;
+    font: inherit;
+    padding: 0.65em 0.9em;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+  }
+  .note { font-size: 0.82rem; color: var(--ink-3); flex-basis: 100%; }
+</style>

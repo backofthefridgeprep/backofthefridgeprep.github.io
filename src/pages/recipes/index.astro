@@ -1,0 +1,116 @@
+---
+import Base from '../../layouts/Base.astro';
+import RecipeCard from '../../components/RecipeCard.astro';
+import { getRecipes, dietLabel } from '../../lib/content';
+
+const recipes = await getRecipes();
+
+const count = (values: string[]) => {
+  const m = new Map<string, number>();
+  values.forEach((v) => m.set(v, (m.get(v) ?? 0) + 1));
+  return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+};
+
+const groups = [
+  {
+    name: 'Diet',
+    options: count(recipes.flatMap((r) => r.data.diet.filter((d) => !d.startsWith('contains') && d !== 'eggless'))).map(([v]) => ({ value: v, label: dietLabel[v] })),
+  },
+  {
+    name: 'Cuisine',
+    options: count(recipes.flatMap((r) => r.data.cuisine)).map(([v]) => ({ value: `cuisine:${v}`, label: v })),
+  },
+  {
+    name: 'Course',
+    options: count(recipes.flatMap((r) => r.data.course)).map(([v]) => ({ value: `course:${v}`, label: v[0].toUpperCase() + v.slice(1) })),
+  },
+  { name: 'Storage', options: [{ value: 'freezer', label: 'Freezes well' }] },
+].filter((g) => g.options.length > 0);
+---
+
+<Base title="Recipes" description="Meal-prep recipes that keep in the fridge or freezer: Indian, Mediterranean, Asian and more.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">{recipes.length} recipes</p>
+      <h1>Recipes</h1>
+      <p class="lede">Every dish here has been through a real Sunday prep and a real week of reheating.</p>
+    </header>
+
+    <div class="filters" role="group" aria-label="Filter recipes">
+      {
+        groups.map((g) => (
+          <div class="fgroup" data-group={g.name}>
+            <span class="fname">{g.name}</span>
+            {g.options.map((o) => (
+              <button type="button" class="fbtn" data-value={o.value} aria-pressed="false">
+                {o.label}
+              </button>
+            ))}
+          </div>
+        ))
+      }
+      <button type="button" class="clear" hidden>Clear filters</button>
+    </div>
+
+    <p class="empty" hidden>Nothing matches all of those yet. Try removing a filter.</p>
+    <div class="grid" id="recipe-grid">
+      {recipes.map((r) => <RecipeCard recipe={r} />)}
+    </div>
+  </div>
+</Base>
+
+<script>
+  // One active option per group; a card must match every active group.
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('.fbtn')];
+  const cards = [...document.querySelectorAll<HTMLElement>('#recipe-grid > [data-filters]')];
+  const clear = document.querySelector<HTMLButtonElement>('.clear')!;
+  const empty = document.querySelector<HTMLElement>('.empty')!;
+
+  function apply() {
+    const active = buttons.filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.dataset.value!);
+    let shown = 0;
+    for (const card of cards) {
+      const tags = (card.dataset.filters ?? '').split(' ');
+      const ok = active.every((a) => tags.includes(a));
+      card.hidden = !ok;
+      if (ok) shown++;
+    }
+    clear.hidden = active.length === 0;
+    empty.hidden = shown > 0;
+  }
+
+  for (const b of buttons) {
+    b.addEventListener('click', () => {
+      const on = b.getAttribute('aria-pressed') === 'true';
+      b.closest('.fgroup')!.querySelectorAll('.fbtn').forEach((x) => x.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', String(!on));
+      apply();
+    });
+  }
+  clear.addEventListener('click', () => {
+    buttons.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+    apply();
+  });
+</script>
+
+<style>
+  .page-head { padding: 48px 0 8px; }
+  .filters { display: grid; gap: 10px; margin: 16px 0 28px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .fgroup { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .fname { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); width: 76px; }
+  .fbtn {
+    font: inherit;
+    font-size: 0.88rem;
+    padding: 0.28em 0.8em;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+  .fbtn:hover { border-color: var(--basil); }
+  .fbtn[aria-pressed='true'] { background: var(--basil); border-color: var(--basil); color: var(--paper); }
+  .clear { justify-self: start; font: inherit; font-size: 0.85rem; background: none; border: 0; color: var(--tomato); cursor: pointer; padding: 0; text-decoration: underline; }
+  .empty { color: var(--ink-2); }
+  :global(#recipe-grid > [hidden]) { display: none; }
+</style>

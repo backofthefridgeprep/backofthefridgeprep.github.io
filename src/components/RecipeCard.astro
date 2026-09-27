@@ -1,0 +1,59 @@
+---
+import type { Recipe } from '../lib/content';
+import { formatMinutes, totalMinutes, dietLabel } from '../lib/content';
+
+interface Props { recipe: Recipe }
+const { recipe } = Astro.props;
+const d = recipe.data;
+const time = formatMinutes(totalMinutes(recipe));
+const diet = d.diet.filter((x) => x !== 'eggless').slice(0, 2);
+const filters = [...d.diet, ...d.cuisine.map((c) => `cuisine:${c}`), ...d.course.map((c) => `course:${c}`), d.storage?.freezer ? 'freezer' : ''].filter(Boolean).join(' ');
+---
+
+<a href={`/recipes/${recipe.id}/`} class="card" data-filters={filters}>
+  <div class="label" aria-hidden="true">
+    <span>{d.kind === 'technique' ? 'Technique' : d.course[0] ?? 'Recipe'}</span>
+    <span>{d.cuisine.join(' · ')}</span>
+  </div>
+  <h3>{d.title}{d.draft && <span class="chip tomato draft">Draft</span>}</h3>
+  <p>{d.description}</p>
+  <div class="meta">
+    {time && <span class="chip">{time}</span>}
+    {d.servings && <span class="chip">{d.servings} servings</span>}
+    {diet.map((x) => <span class={`chip ${x.startsWith('contains') ? 'tomato' : 'basil'}`}>{dietLabel[x]}</span>)}
+    {d.storage?.freezer && <span class="chip frost">Freezes</span>}
+  </div>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 20px 18px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink);
+    text-decoration: none;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .card:hover { transform: translateY(-2px); border-color: var(--basil); }
+  .label {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--turmeric);
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 10px;
+  }
+  .label span:last-child { color: var(--ink-3); text-align: right; }
+  h3 { margin: 0; font-size: 1.3rem; }
+  p { margin: 0; color: var(--ink-2); font-size: 0.95rem; flex: 1; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px; }
+  .draft { margin-left: 8px; vertical-align: middle; font-family: var(--sans); }
+</style>

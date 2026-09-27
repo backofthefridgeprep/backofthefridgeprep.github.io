@@ -1,0 +1,125 @@
+---
+import Base from '../../layouts/Base.astro';
+import RecipeCard from '../../components/RecipeCard.astro';
+import { render, getEntries } from 'astro:content';
+import { getPreps, formatDate } from '../../lib/content';
+import type { Prep } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const preps = await getPreps();
+  return preps.map((prep) => ({ params: { id: prep.id }, props: { prep } }));
+}
+
+interface Props { prep: Prep }
+const { prep } = Astro.props;
+const d = prep.data;
+const { Content } = await render(prep);
+const recipes = (await getEntries(d.recipes)).filter((r) => import.meta.env.DEV || !r.data.draft);
+
+const whereLabel = { fridge: 'Fridge', freezer: 'Freezer', fresh: 'Cook fresh' } as const;
+const whereClass = { fridge: 'basil', freezer: 'frost', fresh: 'turmeric' } as const;
+const hasSlots = d.menu.some((day) => day.meals.some((m) => m.slot));
+---
+
+<Base title={d.title} description={d.description}>
+  <article class="wrap">
+    <header class="phead">
+      <p class="eyebrow">Sunday prep · {formatDate(d.date)}{d.draft && ' · Draft (not published)'}</p>
+      <h1>{d.title}</h1>
+      <p class="lede">{d.description}</p>
+      <dl class="facts">
+        <div><dt>Meals</dt><dd>{d.containers}</dd></div>
+        {d.people && <div><dt>People</dt><dd>{d.people}</dd></div>}
+        <div><dt>Hands-on</dt><dd>{d.activeTime}</dd></div>
+        <div><dt>Recipes</dt><dd>{recipes.length}</dd></div>
+      </dl>
+    </header>
+
+    {
+      d.menu.length > 0 && (
+        <section>
+          <h2>The week</h2>
+          <div class="menu">
+            {d.menu.map((day) => (
+              <div class="day">
+                <p class="dname">{day.day}</p>
+                <ul>
+                  {day.meals.map((m) => (
+                    <li>
+                      {hasSlots && m.slot && <span class="slot">{m.slot}</span>}
+                      <span class="dish">{m.dish}</span>
+                      {m.where && <span class={`chip ${whereClass[m.where]}`}>{whereLabel[m.where]}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      d.timeline.length > 0 && (
+        <section>
+          <h2>Cooking order</h2>
+          <p class="sub">Times are minutes from when you start.</p>
+          <ol class="timeline">
+            {d.timeline.map((t) => (
+              <li>
+                <span class="t">{t.time}</span>
+                <div>
+                  {t.station && <span class="station">{t.station}</span>}
+                  <p>{t.task}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    <section class="prose body">
+      <Content />
+    </section>
+
+    {
+      recipes.length > 0 && (
+        <section>
+          <h2>Recipes in this prep</h2>
+          <div class="grid">
+            {recipes.map((r) => <RecipeCard recipe={r} />)}
+          </div>
+        </section>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .phead { padding: 48px 0 8px; max-width: 48em; }
+  .facts { display: flex; flex-wrap: wrap; margin: 20px 0 0; border: 1px solid var(--line); border-radius: 12px; background: var(--card); width: fit-content; max-width: 100%; }
+  .facts div { padding: 10px 18px; border-right: 1px solid var(--line); }
+  .facts div:last-child { border-right: 0; }
+  .facts dt { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+  .facts dd { margin: 0; font-weight: 600; }
+
+  .menu { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+  .day { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .dname { font-family: var(--serif); font-weight: 700; font-size: 1.15rem; margin: 0 0 6px; }
+  .day ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .day li { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font-size: 0.93rem; line-height: 1.35; }
+  .slot { flex-basis: 100%; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+  .dish { flex: 1 1 auto; }
+
+  .sub { color: var(--ink-3); font-size: 0.9rem; margin-top: -0.4em; }
+  .timeline { list-style: none; padding: 0; margin: 0; max-width: 46em; }
+  .timeline li { display: grid; grid-template-columns: 96px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px dashed var(--line); }
+  .t { font-family: var(--serif); font-weight: 700; color: var(--basil); font-variant-numeric: tabular-nums; }
+  .timeline p { margin: 0; }
+  .station { display: inline-block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--turmeric); margin-bottom: 2px; }
+  @media (max-width: 480px) { .timeline li { grid-template-columns: 1fr; gap: 2px; } }
+
+  .body { margin-top: 12px; }
+  section { margin-top: 8px; }
+</style>
