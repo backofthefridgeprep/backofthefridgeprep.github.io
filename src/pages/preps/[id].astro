@@ -17,7 +17,7 @@ const { Content } = await render(prep);
 const recipes = (await getEntries(d.recipes)).filter((r) => import.meta.env.DEV || !r.data.draft);
 
 const whereLabel = { fridge: 'Fridge', freezer: 'Freezer', fresh: 'Cook fresh' } as const;
-const whereClass = { fridge: 'basil', freezer: 'frost', fresh: 'turmeric' } as const;
+const whereClass = { fridge: 'sage', freezer: 'frost', fresh: 'saffron' } as const;
 const hasSlots = d.menu.some((day) => day.meals.some((m) => m.slot));
 ---
 
@@ -106,7 +106,7 @@ const hasSlots = d.menu.some((day) => day.meals.some((m) => m.slot));
 
   .menu { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
   .day { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
-  .dname { font-family: var(--serif); font-weight: 700; font-size: 1.15rem; margin: 0 0 6px; }
+  .dname { font-family: var(--display); font-style: italic; font-weight: 700; font-size: 1.15rem; margin: 0 0 6px; }
   .day ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
   .day li { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font-size: 0.93rem; line-height: 1.35; }
   .slot { flex-basis: 100%; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
@@ -115,9 +115,9 @@ const hasSlots = d.menu.some((day) => day.meals.some((m) => m.slot));
   .sub { color: var(--ink-3); font-size: 0.9rem; margin-top: -0.4em; }
   .timeline { list-style: none; padding: 0; margin: 0; max-width: 46em; }
   .timeline li { display: grid; grid-template-columns: 96px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px dashed var(--line); }
-  .t { font-family: var(--serif); font-weight: 700; color: var(--basil); font-variant-numeric: tabular-nums; }
+  .t { font-family: var(--display); font-weight: 600; color: var(--pop); font-variant-numeric: tabular-nums; }
   .timeline p { margin: 0; }
-  .station { display: inline-block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--turmeric); margin-bottom: 2px; }
+  .station { display: inline-block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--saffron); margin-bottom: 2px; }
   @media (max-width: 480px) { .timeline li { grid-template-columns: 1fr; gap: 2px; } }
 
   .body { margin-top: 12px; }

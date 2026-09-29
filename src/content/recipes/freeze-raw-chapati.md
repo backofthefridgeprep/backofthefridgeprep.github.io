@@ -2,6 +2,8 @@
 title: How to Freeze Raw Chapati
 description: Roll a big batch of chapatis once, freeze them raw between parchment, and cook them straight from frozen on a hot tawa.
 date: 2026-09-27
+tested:
+  date: 2026-09-27
 kind: technique
 cuisine: [Indian]
 course: [bread]

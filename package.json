@@ -1,9 +1,9 @@
 {
-  "name": "fridgefirst",
+  "name": "backofthefridge",
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Fridge First — weekly meal prep from what you already have.",
+  "description": "Back of the Fridge — Sunday meal prep, tested in my kitchen.",
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",

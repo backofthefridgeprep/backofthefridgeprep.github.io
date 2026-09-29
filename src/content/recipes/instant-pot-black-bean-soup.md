@@ -2,6 +2,10 @@
 title: Instant Pot Veggie Black Bean Soup
 description: A thick tomato and black bean soup loaded with potato, zucchini, cabbage and spinach. Eight minutes at pressure, and a jar of marinara does the seasoning.
 date: 2026-09-27
+tested:
+  date: 2026-09-27
+image: ../../assets/photos/black-bean-soup.jpg
+imageAlt: Six bowls and containers of black bean vegetable soup topped with shredded cheddar
 cuisine: [American, Italian]
 course: [soup]
 diet: [vegan, vegetarian, eggless]

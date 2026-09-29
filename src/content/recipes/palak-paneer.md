@@ -2,6 +2,8 @@
 title: Palak Paneer
 description: Blanched spinach blended smooth with green chilies, simmered with an onion-tomato masala and finished with cream and soft paneer.
 date: 2026-09-27
+tested:
+  date: 2026-09-27
 cuisine: [Indian]
 course: [main]
 diet: [vegetarian, eggless]

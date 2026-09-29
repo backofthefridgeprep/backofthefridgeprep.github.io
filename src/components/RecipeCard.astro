@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import type { Recipe } from '../lib/content';
 import { formatMinutes, totalMinutes, dietLabel } from '../lib/content';
+import TestedStamp from './TestedStamp.astro';
 
 interface Props { recipe: Recipe }
 const { recipe } = Astro.props;
@@ -8,52 +10,61 @@ const d = recipe.data;
 const time = formatMinutes(totalMinutes(recipe));
 const diet = d.diet.filter((x) => x !== 'eggless').slice(0, 2);
 const filters = [...d.diet, ...d.cuisine.map((c) => `cuisine:${c}`), ...d.course.map((c) => `course:${c}`), d.storage?.freezer ? 'freezer' : ''].filter(Boolean).join(' ');
+const kicker = d.kind === 'technique' ? 'Technique' : d.course[0] ?? 'Recipe';
+// Placeholder tint rotates so a grid of photo-less cards doesn't look like one block.
+const tints = ['var(--saffron-soft)', 'var(--sage-soft)', 'var(--pop-soft)', 'var(--frost-soft)'];
+const tint = tints[[...recipe.id].reduce((a, c) => a + c.charCodeAt(0), 0) % tints.length];
 ---
 
 <a href={`/recipes/${recipe.id}/`} class="card" data-filters={filters}>
-  <div class="label" aria-hidden="true">
-    <span>{d.kind === 'technique' ? 'Technique' : d.course[0] ?? 'Recipe'}</span>
-    <span>{d.cuisine.join(' · ')}</span>
+  <div class="media">
+    {
+      d.image ? (
+        <Image src={d.image} alt={d.imageAlt ?? ''} widths={[400, 700]} sizes="(min-width: 760px) 360px, 100vw" class="photo" />
+      ) : (
+        <div class="ph" style={`background:${tint}`} aria-hidden="true">
+          <span class="ph-letter">{d.title[0]}</span>
+          <span class="ph-note">photo coming</span>
+        </div>
+      )
+    }
+    {d.draft && <span class="chip pop draft">Draft</span>}
   </div>
-  <h3>{d.title}{d.draft && <span class="chip tomato draft">Draft</span>}</h3>
-  <p>{d.description}</p>
-  <div class="meta">
-    {time && <span class="chip">{time}</span>}
-    {d.servings && <span class="chip">{d.servings} servings</span>}
-    {diet.map((x) => <span class={`chip ${x.startsWith('contains') ? 'tomato' : 'basil'}`}>{dietLabel[x]}</span>)}
-    {d.storage?.freezer && <span class="chip frost">Freezes</span>}
+  <div class="body">
+    <p class="eyebrow">{kicker}{d.cuisine.length > 0 && ` · ${d.cuisine.join(' · ')}`}</p>
+    <h3>{d.title}</h3>
+    <p class="desc">{d.description}</p>
+    <div class="meta">
+      {d.tested && <TestedStamp date={d.tested.date} by={d.tested.by} size="sm" />}
+      {time && <span class="chip">{time}</span>}
+      {diet.map((x) => <span class={`chip ${x.startsWith('contains') ? 'pop' : 'sage'}`}>{dietLabel[x]}</span>)}
+      {d.storage?.freezer && <span class="chip frost">Freezes</span>}
+    </div>
   </div>
 </a>
 
 <style>
-  .card {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 20px 20px 18px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    color: var(--ink);
-    text-decoration: none;
-    transition: transform 0.15s ease, border-color 0.15s ease;
-  }
-  .card:hover { transform: translateY(-2px); border-color: var(--basil); }
-  .label {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    font-size: 0.72rem;
+  .card { display: flex; flex-direction: column; gap: 14px; color: var(--ink); text-decoration: none; }
+  .media { position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden; background: var(--paper-2); }
+  .media :global(.photo) { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+  .card:hover .media :global(.photo) { transform: scale(1.03); }
+  .ph { width: 100%; height: 100%; display: grid; place-items: center; position: relative; }
+  .ph-letter {
+    font-family: var(--display);
+    font-style: italic;
     font-weight: 600;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--turmeric);
-    border-bottom: 1px dashed var(--line);
-    padding-bottom: 10px;
+    font-size: 5.5rem;
+    line-height: 1;
+    color: var(--ink);
+    opacity: 0.22;
+    font-variation-settings: 'SOFT' 100, 'WONK' 1;
   }
-  .label span:last-child { color: var(--ink-3); text-align: right; }
-  h3 { margin: 0; font-size: 1.3rem; }
-  p { margin: 0; color: var(--ink-2); font-size: 0.95rem; flex: 1; }
-  .meta { display: flex; flex-wrap: wrap; gap: 6px; }
-  .draft { margin-left: 8px; vertical-align: middle; font-family: var(--sans); }
+  .ph-note { position: absolute; bottom: 10px; right: 12px; font-family: var(--ui); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+  .draft { position: absolute; top: 10px; left: 10px; }
+  .body { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .eyebrow { margin: 0; }
+  h3 { margin: 0; font-size: 1.4rem; line-height: 1.15; transition: color 0.15s; }
+  .card:hover h3 { color: var(--pop); }
+  .desc { margin: 0; color: var(--ink-2); font-size: 1rem; line-height: 1.5; flex: 1; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 6px; }
 </style>

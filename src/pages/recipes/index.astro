@@ -32,8 +32,8 @@ const groups = [
   <div class="wrap">
     <header class="page-head">
       <p class="eyebrow">{recipes.length} recipes</p>
-      <h1>Recipes</h1>
-      <p class="lede">Every dish here has been through a real Sunday prep and a real week of reheating.</p>
+      <h1>The <span class="script" style="color:var(--pop)">recipes</span></h1>
+      <p class="lede">Every dish here has been cooked in my kitchen, packed into containers, and reheated midweek before it went up.</p>
     </header>
 
     <div class="filters" role="group" aria-label="Filter recipes">
@@ -108,9 +108,9 @@ const groups = [
     color: var(--ink-2);
     cursor: pointer;
   }
-  .fbtn:hover { border-color: var(--basil); }
-  .fbtn[aria-pressed='true'] { background: var(--basil); border-color: var(--basil); color: var(--paper); }
-  .clear { justify-self: start; font: inherit; font-size: 0.85rem; background: none; border: 0; color: var(--tomato); cursor: pointer; padding: 0; text-decoration: underline; }
+  .fbtn:hover { border-color: var(--pop); }
+  .fbtn[aria-pressed='true'] { background: var(--pop); border-color: var(--pop); color: var(--paper); }
+  .clear { justify-self: start; font: inherit; font-size: 0.85rem; background: none; border: 0; color: var(--pop); cursor: pointer; padding: 0; text-decoration: underline; }
   .empty { color: var(--ink-2); }
   :global(#recipe-grid > [hidden]) { display: none; }
 </style>

@@ -2,6 +2,8 @@
 title: Tofu Edamame Veggie Stir-Fry
 description: Crispy cornstarch-coated tofu with broccoli, mushrooms, peppers, cabbage and edamame in a sweet-savory soy-ginger sauce. Cook the glass noodles fresh on the day.
 date: 2026-09-27
+tested:
+  date: 2026-09-27
 cuisine: [Chinese, Pan-Asian]
 course: [main]
 diet: [vegetarian, eggless]

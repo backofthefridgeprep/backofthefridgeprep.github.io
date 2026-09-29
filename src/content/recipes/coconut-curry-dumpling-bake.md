@@ -2,6 +2,10 @@
 title: Coconut Curry Dumpling Bake
 description: Frozen dumplings baked straight into a coconut curry with broccoli, mushrooms and peppers. No thawing, one dish, served over rice.
 date: 2026-09-27
+tested:
+  date: 2026-09-27
+image: ../../assets/photos/coconut-curry-dumpling-bake.jpg
+imageAlt: Baked dumplings in coconut curry in a white ceramic dish, topped with sliced green onion
 cuisine: [Pan-Asian, Fusion]
 course: [main]
 diet: []

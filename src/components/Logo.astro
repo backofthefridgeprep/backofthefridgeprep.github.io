@@ -1,0 +1,45 @@
+---
+// Text-only logo. `mark` = the BotF monogram; `full` = the stacked wordmark.
+interface Props { variant?: 'mark' | 'full'; class?: string }
+const { variant = 'mark', class: cls } = Astro.props;
+---
+
+{
+  variant === 'mark' ? (
+    <span class:list={['mark', cls]} aria-hidden="true">
+      B<span class="o">o</span>tF
+    </span>
+  ) : (
+    <span class:list={['full', cls]}>
+      <span class="l1">Back of</span>
+      <span class="l2">the Fridge</span>
+    </span>
+  )
+}
+
+<style>
+  .mark {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.7rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 72;
+    color: var(--ink);
+  }
+  .mark .o { color: var(--pop); }
+
+  .full {
+    display: inline-flex;
+    flex-direction: column;
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: -0.035em;
+    font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
+    color: var(--ink);
+  }
+  .full .l2 { padding-left: 0.55em; }
+</style>

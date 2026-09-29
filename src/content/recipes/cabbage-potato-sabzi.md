@@ -2,6 +2,8 @@
 title: Cabbage-Potato Sabzi
 description: A dry, everyday Indian stir-fry of shredded cabbage and diced potato with mustard seeds, cumin and turmeric.
 date: 2026-09-27
+tested:
+  date: 2026-09-27
 cuisine: [Indian]
 course: [side]
 diet: [vegan, vegetarian, eggless]

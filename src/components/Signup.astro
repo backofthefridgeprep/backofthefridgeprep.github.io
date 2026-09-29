@@ -1,20 +1,22 @@
 ---
 // Email signup. Until a newsletter service is chosen, set nothing and the form
-// falls back to a pre-filled email to fridgefirst.prep@gmail.com.
+// falls back to a pre-filled email to the brand inbox.
 // Later: set PUBLIC_SIGNUP_ACTION (e.g. a Buttondown or Kit form URL) as a
 // GitHub Actions variable and the form posts there instead.
+import { site } from '../lib/site';
 const action = import.meta.env.PUBLIC_SIGNUP_ACTION as string | undefined;
 const mailto =
-  'mailto:fridgefirst.prep@gmail.com?subject=' +
-  encodeURIComponent('Add me to the Fridge First list') +
+  `mailto:${site.email}?subject=` +
+  encodeURIComponent('Add me to the Back of the Fridge list') +
   '&body=' +
-  encodeURIComponent('Hi! Please send me the weekly Sunday prep.');
+  encodeURIComponent("Hi Shreya! Please send me the Sunday prep.");
 ---
 
 <section class="signup" aria-labelledby="signup-h">
   <div>
-    <h2 id="signup-h">One Sunday prep in your inbox each week</h2>
-    <p>The plan, the shopping list and the cooking order. Nothing else.</p>
+    <p class="eyebrow">The Sunday letter</p>
+    <h2 id="signup-h">This week's prep, <span class="script">before Sunday.</span></h2>
+    <p>The menu, the shopping list and the cooking order, once a week. Nothing else.</p>
   </div>
   {
     action ? (
@@ -26,7 +28,7 @@ const mailto =
     ) : (
       <div class="form">
         <a class="btn" href={mailto}>Get on the list</a>
-        <span class="note">Opens an email — the list is small and handmade for now.</span>
+        <span class="note">Opens an email. The list is small and handmade for now.</span>
       </div>
     )
   }
@@ -35,25 +37,27 @@ const mailto =
 <style>
   .signup {
     display: grid;
-    gap: 16px 32px;
+    gap: 20px 40px;
     align-items: center;
-    padding: 28px;
+    padding: 36px 28px;
     border-radius: var(--radius);
-    background: var(--turmeric-soft);
-    border: 1px solid var(--line);
+    background: var(--saffron-soft);
   }
-  @media (min-width: 820px) { .signup { grid-template-columns: 1.3fr 1fr; padding: 36px 40px; } }
-  h2 { margin: 0 0 6px; font-size: 1.5rem; }
+  @media (min-width: 860px) { .signup { grid-template-columns: 1.4fr 1fr; padding: 48px 52px; } }
+  .eyebrow { margin: 0 0 8px; color: var(--saffron); }
+  h2 { margin: 0 0 8px; font-size: clamp(1.6rem, 3vw, 2.1rem); }
+  h2 .script { color: var(--pop); }
   p { margin: 0; color: var(--ink-2); }
   .form { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
   input {
     flex: 1 1 200px;
-    font: inherit;
-    padding: 0.65em 0.9em;
-    border-radius: 10px;
+    font-family: var(--ui);
+    font-size: 0.95rem;
+    padding: 0.7em 1em;
+    border-radius: 999px;
     border: 1px solid var(--line);
     background: var(--card);
     color: var(--ink);
   }
-  .note { font-size: 0.82rem; color: var(--ink-3); flex-basis: 100%; }
+  .note { font-family: var(--ui); font-size: 0.78rem; color: var(--ink-3); flex-basis: 100%; }
 </style>

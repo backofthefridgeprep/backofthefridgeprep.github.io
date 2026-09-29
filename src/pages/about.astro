@@ -1,42 +1,88 @@
 ---
+// Placeholder about page, written from what Shreya has shared so far.
+// TODO(Shreya): rewrite in your own words; add a photo of yourself if you want one.
 import Base from '../layouts/Base.astro';
 import Signup from '../components/Signup.astro';
+import { site } from '../lib/site';
 ---
 
-<Base title="About" description="Why Fridge First exists, and how the recipes are made.">
-  <article class="wrap">
+<Base title="About" description="Who cooks here, and how a recipe earns its place on Back of the Fridge.">
+  <article class="wrap about">
     <header class="page-head">
       <p class="eyebrow">About</p>
-      <h1>Hi, I'm Shreya.</h1>
+      <h1>Hi, I'm <span class="script">Shreya.</span></h1>
+      <p class="byline script">a busy mom who cooks on Sundays</p>
     </header>
-    <div class="prose">
-      <p class="lede">
-        I'm a data scientist and a working mom, and Sunday is the one day I cook properly. Fridge First is where I write
-        those Sundays down.
-      </p>
-      <p>
-        Every prep starts with what's already in the fridge and pantry, not a shopping list. I plan around the week
-        ahead — guests, festivals, late meetings — then cook everything in one session, with the oven, stovetop and
-        Instant Pot running at once.
-      </p>
-      <h2>How recipes are written</h2>
-      <ul>
-        <li>Every recipe has been cooked, packed and reheated across a real week.</li>
-        <li>Each one says how long it keeps in the fridge, whether it freezes, and how to reheat it.</li>
-        <li>Nutrition, where shown, is an estimate from USDA FoodData Central. It's labeled that way on purpose.</li>
-        <li>When a recipe is inspired by someone else's, it's rewritten in my own words and credited.</li>
-      </ul>
-      <h2>What's next</h2>
-      <p>
-        Every recipe here is stored as structured data: ingredients, portions, storage and tags. That's on purpose. I'm
-        building a "reverse recipe" assistant: tell it (or show it) what's in your fridge, and it plans your Sunday prep.
-      </p>
-      <p>Say hi at <a href="mailto:fridgefirst.prep@gmail.com">fridgefirst.prep@gmail.com</a> or on <a href="https://www.pinterest.com/fridgefirstprep/">Pinterest</a>.</p>
+
+    <div class="cols">
+      <div class="prose">
+        <p class="lede">
+          I work full time, I have a little one at home, and Sunday is the one day I really cook. Back of the Fridge is
+          where I write those Sundays down.
+        </p>
+        <p>
+          Every prep starts with what's already in the fridge and pantry, not a shopping list. I look at the week ahead
+          (late meetings, guests, a festival) and plan around it. Then it's one long cooking session, with the oven,
+          stovetop and Instant Pot all going at once, and a stack of labeled containers at the end.
+        </p>
+        <p>
+          The food is whatever we actually eat: palak paneer next to a black bean soup, dumplings baked into a coconut
+          curry, Mediterranean rice bowls. Mostly vegetarian, never fussy, and it has to taste good on a Thursday.
+        </p>
+
+        <h2 id="how">How a recipe gets here</h2>
+        <ol>
+          <li><strong>The idea.</strong> Sometimes it's family food, sometimes something I saw, and sometimes I ask AI what to do with half a cabbage and a block of paneer.</li>
+          <li><strong>I cook it.</strong> In my kitchen, with my groceries, on a real Sunday.</li>
+          <li><strong>I fix what didn't work.</strong> Timings, spice, what went soggy by day three. Those notes go on the recipe under "What I changed."</li>
+          <li><strong>I photograph it.</strong> My own photos, of my own food.</li>
+          <li><strong>Then it goes up</strong> with the date I tested it. If I haven't cooked it, it isn't here.</li>
+        </ol>
+
+        <h2>Why I'm building it this way</h2>
+        <p>
+          I'm a data scientist, and I'm working on an assistant that plans a Sunday prep from whatever you have in your
+          fridge: tell it or show it what's there, and it builds the week. The recipes on this site are what it will learn
+          from, so every one needs to be something a real person cooked and would make again. It gets taught by a kitchen,
+          not by the internet.
+        </p>
+        <p>
+          Recipes inspired by someone else's are rewritten in my own words, after I've made them my way, and credited.
+          Nutrition, where it's shown, is an estimate, and it's labeled that way on purpose.
+        </p>
+        <p>
+          Say hi at <a href={`mailto:${site.email}`}>{site.email}</a> or on <a href={site.pinterest}>Pinterest</a>.
+        </p>
+      </div>
+
+      <aside class="side" aria-label="House rules">
+        <p class="eyebrow">House rules</p>
+        <ul>
+          <li><span class="n">1</span>Cooked in my kitchen before it's posted</li>
+          <li><span class="n">2</span>My own photos</li>
+          <li><span class="n">3</span>Honest notes on what I changed</li>
+          <li><span class="n">4</span>Every container gets a day: fridge or freezer</li>
+          <li><span class="n">5</span>Nutrition is labeled "estimated"</li>
+        </ul>
+      </aside>
     </div>
-    <div style="margin-top: 56px"><Signup /></div>
+
+    <div style="margin-top: 72px"><Signup /></div>
   </article>
 </Base>
 
 <style>
-  .page-head { padding: 48px 0 8px; }
+  .page-head { padding: 56px 0 8px; }
+  .page-head h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); }
+  .page-head h1 .script { color: var(--pop); }
+  .byline { font-size: 1.4rem; color: var(--ink-2); margin-top: -6px; }
+  .cols { display: grid; gap: 48px; margin-top: 24px; }
+  @media (min-width: 900px) { .cols { grid-template-columns: 1fr 300px; gap: 72px; } }
+  .prose ol li::marker { color: var(--pop); }
+  .side { align-self: start; padding: 26px; background: var(--band); color: var(--band-ink); border-radius: var(--radius); }
+  @media (min-width: 900px) { .side { position: sticky; top: 96px; } }
+  .side .eyebrow { color: var(--band-ink); opacity: 0.65; margin: 0 0 12px; }
+  .side ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+  .side li { display: grid; grid-template-columns: 28px 1fr; font-size: 1.02rem; line-height: 1.35; }
+  .side .n { font-family: var(--display); font-style: italic; font-weight: 700; color: #f0a283; font-variation-settings: 'SOFT' 100, 'WONK' 1; }
 </style>

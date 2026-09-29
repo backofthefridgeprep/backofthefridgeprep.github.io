@@ -2,6 +2,8 @@
 title: Mediterranean Chicken & Tofu Rice Bowls
 description: Lemon-oregano chicken and tofu baked on one oven cycle, with roasted okra, peppers and chickpeas over brown and basmati rice. Eleven dabbas from one Sunday.
 date: 2026-09-20
+tested:
+  date: 2026-09-20
 cuisine: [Mediterranean]
 course: [main]
 diet: [contains-meat]

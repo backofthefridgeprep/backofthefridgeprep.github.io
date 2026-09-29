@@ -1,6 +1,6 @@
-# Fridge First
+# Back of the Fridge
 
-Weekly meal prep from what you already have. Live at https://fridgefirstprep.github.io
+Sunday meal prep, tested in my kitchen. By Shreya. Live at https://backofthefridgeprep.github.io
 
 Built with [Astro](https://astro.build), deployed to GitHub Pages by GitHub Actions on every push to `main`.
 
@@ -22,11 +22,15 @@ Everything lives in `src/content/`. The schema is in `src/content.config.ts`; th
 
 YAML gotcha: in the `{ item: ..., note: ... }` style, any value containing a comma must be in quotes, e.g. `note: "stems trimmed, halved if large"`.
 
-Set `draft: true` to keep something off the live site while you finish it.
+Set `draft: true` to keep something off the live site while you finish it. A recipe can only be published once it has a `tested:` block (the date you cooked it) — the build fails otherwise.
+
+**Photos** go in `src/assets/photos/`. Reference them from a recipe with `image: ../../assets/photos/<file>.jpg` plus an `imageAlt`. Astro resizes and compresses them at build time.
+
+**Brand strings** (name, byline, tagline, email, Pinterest) live in `src/lib/site.ts`.
 
 ## Settings
 
-- **Email signup:** with no setup, the button opens an email to fridgefirst.prep@gmail.com. To use a newsletter service, add a repo variable `PUBLIC_SIGNUP_ACTION` (Settings → Secrets and variables → Actions → Variables) set to the service's form URL. The form posts a field named `email`.
+- **Email signup:** with no setup, the button opens an email to backofthefridge.prep@gmail.com. To use a newsletter service, add a repo variable `PUBLIC_SIGNUP_ACTION` (Settings → Secrets and variables → Actions → Variables) set to the service's form URL. The form posts a field named `email`.
 - **Custom domain:** change `site` in `astro.config.mjs` and add `public/CNAME`.
 
 ## First-time GitHub Pages setup
