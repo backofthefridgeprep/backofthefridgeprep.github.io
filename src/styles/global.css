@@ -3,23 +3,23 @@
    Sage = fridge, dusty blue = freezer. Tokens are redefined for dark mode. */
 
 :root {
-  --paper: #f5eee2;
-  --paper-2: #ece2d1;
-  --card: #fbf7f0;
+  --paper: #fffcf7;
+  --paper-2: #f7f0e5;
+  --card: #ffffff;
   --ink: #3a261d;
   --ink-2: #6a5245;
   --ink-3: #8f7867;
-  --line: #e0d3bf;
+  --line: #ede4d6;
   --band: #5a3a2c;      /* deep brown section band */
-  --band-ink: #f5eee2;
+  --band-ink: #fffcf7;
   --pop: #c8431f;       /* paprika — buttons, accents, links */
-  --pop-soft: #f6dccf;
+  --pop-soft: #fce9e0;
   --saffron: #b87a12;
-  --saffron-soft: #f3e3c2;
+  --saffron-soft: #fcf1da;
   --sage: #56663f;
-  --sage-soft: #e2e6d3;
+  --sage-soft: #ebefe0;
   --frost: #486a7e;
-  --frost-soft: #dce5e8;
+  --frost-soft: #e7eff2;
 
   --display: 'Fraunces', Georgia, serif;
   --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
