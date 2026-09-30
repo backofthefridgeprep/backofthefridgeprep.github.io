@@ -307,7 +307,7 @@ const jsonLd: Record<string, unknown> = {
   .wake[aria-pressed='true'] { background: var(--sage-soft); color: var(--sage); box-shadow: none; }
 
   .changed { margin-top: 44px; padding: 26px 30px; border-left: 3px solid var(--pop); background: var(--pop-soft); border-radius: 0 var(--radius) var(--radius) 0; max-width: 46em; }
-  .changed h2 { margin: 0 0 8px; font-size: 1.6rem; color: var(--accent); }
+  .changed h2 { margin: 0 0 8px; font-size: 1.6rem; color: var(--pop); }
   .changed ul { margin: 0; padding-left: 1.2em; }
 
   /* Section headers for Ingredients and Steps */
@@ -320,13 +320,13 @@ const jsonLd: Record<string, unknown> = {
   .igroups { columns: 2 340px; column-gap: 48px; }
   .igroup { margin-bottom: 18px; }
   .igroup li { break-inside: avoid; }
-  .igroup h3 { break-after: avoid; font-family: var(--ui); font-size: 0.74rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 4px; padding-top: 6px; }
+  .igroup h3 { break-after: avoid; font-family: var(--ui); font-size: 0.74rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pop); margin: 0 0 4px; padding-top: 6px; }
   .igroup ul { list-style: none; padding: 0; margin: 0; }
   .igroup li { border-bottom: 1px dashed var(--line); }
   .igroup li:last-child { border-bottom: 0; }
   label { display: flex; gap: 14px; align-items: flex-start; padding: 11px 0; cursor: pointer; font-size: 1.1rem; line-height: 1.4; }
   label strong { font-weight: 600; }
-  input[type='checkbox'] { accent-color: var(--accent-big); width: 22px; height: 22px; margin-top: 2px; flex: none; cursor: pointer; }
+  input[type='checkbox'] { accent-color: var(--pop); width: 22px; height: 22px; margin-top: 2px; flex: none; cursor: pointer; }
   input:checked + span { color: var(--ink-3); text-decoration: line-through; }
   .inote { display: block; font-size: 0.92rem; color: var(--ink-3); font-style: italic; }
   .opt { color: var(--ink-3); font-size: 0.95rem; }
@@ -336,7 +336,7 @@ const jsonLd: Record<string, unknown> = {
   /* Steps: big, numbered, tap to mark done */
   .steps { margin-top: 56px; max-width: 46em; scroll-margin-top: 84px; }
   .steps-body :global(> p) { font-size: 1.12rem; color: var(--ink-2); font-style: italic; }
-  .steps-body :global(h2) { font-family: var(--ui); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 34px 0 10px; }
+  .steps-body :global(h2) { font-family: var(--ui); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pop); margin: 34px 0 10px; }
   .steps-body :global(ol) { list-style: none; padding: 0; margin: 0; counter-reset: step; }
   .steps-body :global(ol > li) {
     counter-increment: step;
@@ -370,7 +370,7 @@ const jsonLd: Record<string, unknown> = {
   }
   .steps-body :global(ol > li:hover) { border-color: var(--pop); }
   .steps-body :global(ol > li.done) { background: var(--paper-2); color: var(--ink-3); text-decoration: line-through; text-decoration-color: var(--ink-3); }
-  .steps-body :global(ol > li.done::before) { content: '✓'; background: var(--sage); color: #fff; }
+  .steps-body :global(ol > li.done::before) { content: '✓'; background: var(--sage); }
   .steps-body :global(ul) { padding-left: 1.2em; font-size: 1.05rem; color: var(--ink-2); }
   .steps-body :global(ul li) { margin-bottom: 0.4em; }
   .steps-body :global(strong) { font-weight: 600; }

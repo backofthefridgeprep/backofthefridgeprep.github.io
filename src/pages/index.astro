@@ -128,7 +128,7 @@ const [latest, ...olderPreps] = preps;
   @media (min-width: 900px) { .hero { grid-template-columns: 1.15fr 0.85fr; gap: 64px; } }
   .hero-text .eyebrow { margin-bottom: 22px; }
   .hero :global(.hero-logo) { font-size: clamp(3.6rem, 10vw, 7.2rem); }
-  .byline { font-size: clamp(1.25rem, 2.4vw, 1.6rem); color: var(--accent-big); margin: 18px 0 22px; }
+  .byline { font-size: clamp(1.25rem, 2.4vw, 1.6rem); color: var(--pop); margin: 18px 0 22px; }
   .lede { font-size: 1.2rem; }
   .cta { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; margin-top: 30px; }
 
@@ -136,20 +136,20 @@ const [latest, ...olderPreps] = preps;
   .hero-photo :global(img) { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 220px 220px var(--radius) var(--radius); }
   .hero-photo figcaption { font-family: var(--ui); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-top: 10px; text-align: right; }
   .badge { position: absolute; width: 112px; height: 112px; left: -28px; bottom: 36px; transform: rotate(-12deg); }
-  .badge circle { fill: var(--pop); }
-  .badge text { font-family: var(--ui); font-size: 9.5px; font-weight: 600; letter-spacing: 0.15em; fill: var(--on-pop); }
+  .badge circle { fill: var(--rose); }
+  .badge text { font-family: var(--ui); font-size: 9.5px; font-weight: 600; letter-spacing: 0.15em; fill: var(--cocoa); }
   .badge .b { font-family: var(--display); font-style: italic; font-weight: 700; font-size: 34px; letter-spacing: 0; font-variation-settings: 'SOFT' 100, 'WONK' 1; }
   @media (max-width: 560px) { .badge { width: 88px; height: 88px; left: -6px; bottom: 28px; } }
 
   .band { background: var(--band); color: var(--band-ink); padding: clamp(40px, 6vw, 64px) 0; }
   .band-inner { display: grid; gap: 18px; justify-items: center; text-align: center; }
   .band-quote { font-family: var(--display); font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.3; max-width: 30em; margin: 0; font-variation-settings: 'SOFT' 100; }
-  .band-quote .script { color: var(--accent-big); }
-  .band-link { color: var(--band-ink); font-family: var(--ui); font-size: 0.88rem; font-weight: 600; letter-spacing: 0.04em; text-decoration: none; border-bottom: 1.5px solid var(--pop); padding-bottom: 2px; }
+  .band-quote .script { color: var(--rose); }
+  .band-link { color: var(--band-ink); font-family: var(--ui); font-size: 0.88rem; font-weight: 600; letter-spacing: 0.04em; text-decoration: none; border-bottom: 1.5px solid var(--rose); padding-bottom: 2px; }
 
   .head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-top: 88px; margin-bottom: 26px; flex-wrap: wrap; }
   .head h2 { margin: 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
-  .head h2 .script { color: var(--accent-big); }
+  .head h2 .script { color: var(--pop); }
   .older { display: grid; gap: 16px; margin-top: 16px; }
   @media (min-width: 860px) { .older { grid-template-columns: 1fr 1fr; } }
 
@@ -157,5 +157,5 @@ const [latest, ...olderPreps] = preps;
   @media (min-width: 760px) { .how ol { grid-template-columns: repeat(3, 1fr); gap: 48px; } }
   .how h3 { margin: 4px 0 6px; font-size: 1.3rem; }
   .how p { margin: 0; color: var(--ink-2); font-size: 1rem; }
-  .n { font-family: var(--display); font-style: italic; font-size: 1.6rem; color: var(--accent-big); font-variation-settings: 'SOFT' 100, 'WONK' 1; }
+  .n { font-family: var(--display); font-style: italic; font-size: 1.6rem; color: var(--pop); font-variation-settings: 'SOFT' 100, 'WONK' 1; }
 </style>
