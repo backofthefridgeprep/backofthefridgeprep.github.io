@@ -1,25 +1,34 @@
 /* Back of the Fridge — base styles.
-   Warm and earthy: cream paper, espresso ink, one paprika pop, saffron for the tested stamp.
-   Sage = fridge, dusty blue = freezer. Tokens are redefined for dark mode. */
+   Palette: peach #fadfc8, apricot #f0cdb1, rose #efa49f, white, cocoa #6d4340.
+   Pale rose/peach fills stay decorative; text and buttons use cocoa or a deeper
+   rose (--pop) so they stay readable. Sage = fridge, dusty blue = freezer.
+   Tokens are redefined for dark mode. */
 
 :root {
-  --paper: #fffcf7;
-  --paper-2: #f7f0e5;
-  --card: #ffffff;
-  --ink: #3a261d;
-  --ink-2: #6a5245;
-  --ink-3: #8f7867;
-  --line: #ede4d6;
-  --band: #5a3a2c;      /* deep brown section band */
-  --band-ink: #fffcf7;
-  --pop: #c8431f;       /* paprika — buttons, accents, links */
-  --pop-soft: #fce9e0;
-  --saffron: #b87a12;
-  --saffron-soft: #fcf1da;
-  --sage: #56663f;
-  --sage-soft: #ebefe0;
-  --frost: #486a7e;
-  --frost-soft: #e7eff2;
+  /* the palette */
+  --peach: #fadfc8;
+  --apricot: #f0cdb1;
+  --rose: #efa49f;
+  --cocoa: #6d4340;
+
+  --paper: #ffffff;
+  --paper-2: #fdf0e6;   /* lighter peach: done steps, hovers */
+  --card: #fffaf6;      /* barely-peach cards on the white page */
+  --ink: #6d4340;       /* cocoa */
+  --ink-2: #86605b;
+  --ink-3: #93706a;
+  --line: #f3dccb;      /* soft apricot */
+  --band: #6d4340;      /* cocoa section bands + footer */
+  --band-ink: #ffffff;
+  --on-pop: #ffffff;    /* text on --pop fills */
+  --pop: #b5524d;       /* deeper rose — buttons, links, accents (readable on white) */
+  --pop-soft: #fbe4e1;  /* light rose */
+  --saffron: #b0655b;   /* tested stamp — rose-terracotta */
+  --saffron-soft: #fadfc8; /* peach — signup box, "for little ones" */
+  --sage: #66724c;
+  --sage-soft: #eef0e4;
+  --frost: #587483;
+  --frost-soft: #eaf0f3;
 
   --display: 'Fraunces', Georgia, serif;
   --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
@@ -32,23 +41,24 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #1d1612;
-    --paper-2: #261d18;
-    --card: #2a201b;
-    --ink: #f1e7d8;
-    --ink-2: #cdbca9;
-    --ink-3: #9d8b7b;
-    --line: #3f322a;
-    --band: #33231b;
-    --band-ink: #f1e7d8;
-    --pop: #ee7a55;
-    --pop-soft: #3e241b;
-    --saffron: #e8b153;
-    --saffron-soft: #3a2d17;
-    --sage: #aebd92;
-    --sage-soft: #2b3223;
-    --frost: #9dbccd;
-    --frost-soft: #1f2c33;
+    --paper: #211615;
+    --paper-2: #2b1d1b;
+    --card: #2e201e;
+    --ink: #fadfc8;
+    --ink-2: #e2c1b0;
+    --ink-3: #b8978a;
+    --line: #45312d;
+    --band: #3a2624;
+    --band-ink: #fadfc8;
+    --on-pop: #3a2624;
+    --pop: #efa49f;
+    --pop-soft: #432a28;
+    --saffron: #f0b2a4;
+    --saffron-soft: #3d2b25;
+    --sage: #b3c099;
+    --sage-soft: #2c3124;
+    --frost: #a3c0cf;
+    --frost-soft: #22303a;
     color-scheme: dark;
   }
 }
@@ -136,7 +146,7 @@ p { margin: 0 0 1em; }
   padding: 0.75em 1.4em;
   border-radius: 999px;
   background: var(--pop);
-  color: #fff8f0;
+  color: var(--on-pop);
   border: 0;
   font-family: var(--ui);
   font-size: 0.9rem;

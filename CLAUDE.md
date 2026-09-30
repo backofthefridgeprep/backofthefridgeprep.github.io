@@ -29,8 +29,8 @@ Shreya is strong in Python/ML and newer to frontend. Explain frontend changes br
 
 ## Brand
 - Voice: first person, plain, warm, unfussy. Audience: busy working parents who prep once a week.
-- Look: warm and bright (warm off-white #fffcf7 background, espresso brown text and bands), paprika red as the one pop color, saffron for the tested stamp. Fonts: Fraunces (display, italic "script" accents), Newsreader (body), Instrument Sans (labels).
-- Logo: text only — "BotF" monogram with a paprika B, stacked "Back of / the Fridge" wordmark (weight 600). Favicon: paprika B on off-white.
+- Palette (Sep 30): peach #fadfc8, apricot #f0cdb1, rose #efa49f, white, cocoa #6d4340. White page, cocoa text and bands, peach/rose as soft fills, a deeper rose (#b5524d, `--pop`) for buttons/links so text stays readable. Colors live at the top of `src/styles/global.css`. Fonts: Fraunces (display, italic "script" accents), Newsreader (body), Instrument Sans (labels).
+- Logo: text only — "BotF" monogram with a rose B, stacked "Back of / the Fridge" wordmark (weight 600). Favicon: cocoa B on a peach circle.
 - Email: backofthefridge.prep@gmail.com. Pinterest: https://www.pinterest.com/backofthefridgeprep/
 - Instagram is out of scope for now; Pinterest + LinkedIn build-in-public.
 
