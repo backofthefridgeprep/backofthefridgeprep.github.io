@@ -17,7 +17,7 @@ const diet = d.diet.filter((x) => x !== 'eggless').slice(0, 2);
 const filters = [...d.cuisine.map((c) => `cuisine:${c.replace(/\s+/g, '_')}`), timeBucket].filter(Boolean).join(' ');
 const kicker = d.kind === 'technique' ? 'Technique' : d.course[0] ?? 'Recipe';
 // Placeholder tint rotates so a grid of photo-less cards doesn't look like one block.
-const tints = ['var(--peach)', 'var(--pop-soft)', '#f7e2d0', 'var(--sage-soft)'];
+const tints = ['var(--saffron-soft)', 'var(--sage-soft)', 'var(--pop-soft)', 'var(--frost-soft)'];
 const tint = tints[[...recipe.id].reduce((a, c) => a + c.charCodeAt(0), 0) % tints.length];
 ---
 
