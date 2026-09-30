@@ -39,7 +39,7 @@ ingredients:
 storage:
   fridgeDays: 2
   freezer: false
-reheat: Microwave 2–3 min. Sprinkle a little water on the rice first.
+reheat: "Microwave 2–3 min. Sprinkle water on the rice first."
 prep: sunday-prep-sept-28
 ---
 

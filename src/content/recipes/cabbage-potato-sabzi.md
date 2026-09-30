@@ -28,7 +28,7 @@ ingredients:
 storage:
   fridgeDays: 3
   freezer: true
-reheat: Microwave or stovetop.
+reheat: "Microwave or stovetop."
 forLittleOnes: Soft potato cubes are easy to set aside before the chili goes in.
 prep: sunday-prep-sept-28
 ---

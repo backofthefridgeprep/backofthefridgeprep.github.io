@@ -1,9 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
 import RecipeCard from '../../components/RecipeCard.astro';
+import PrepBanner from '../../components/PrepBanner.astro';
+import ShoppingList from '../../components/ShoppingList.astro';
 import { render, getEntries } from 'astro:content';
 import { getPreps, formatDate } from '../../lib/content';
-import type { Prep } from '../../lib/content';
+import type { Prep, Recipe } from '../../lib/content';
 
 export async function getStaticPaths() {
   const preps = await getPreps();
@@ -14,14 +16,46 @@ interface Props { prep: Prep }
 const { prep } = Astro.props;
 const d = prep.data;
 const { Content } = await render(prep);
-const recipes = (await getEntries(d.recipes)).filter((r) => import.meta.env.DEV || !r.data.draft);
+const visible = (r: Recipe) => import.meta.env.DEV || !r.data.draft;
+const recipes = (await getEntries(d.recipes)).filter(visible);
 
-const whereLabel = { fridge: 'Fridge', freezer: 'Freezer', fresh: 'Cook fresh' } as const;
-const whereClass = { fridge: 'sage', freezer: 'frost', fresh: 'saffron' } as const;
-const hasSlots = d.menu.some((day) => day.meals.some((m) => m.slot));
+// What the week holds: explicit `dishes`, or built from the linked recipes.
+const dishes = (
+  d.dishes ??
+  recipes
+    .filter((r) => r.data.kind === 'recipe')
+    .map((r) => ({ name: r.data.title, recipe: { id: r.id }, servings: r.data.servings, freezes: !!r.data.storage?.freezer, note: undefined as string | undefined }))
+).map((x) => ({ ...x, recipeId: x.recipe?.id }));
+const eatFirst = dishes.filter((x) => !x.freezes);
+const freezable = dishes.filter((x) => x.freezes);
+const totalServings = dishes.reduce((n, x) => n + (x.servings ?? 0), 0);
+
+// Recipes used in the plan get a pop-up with their ingredients and steps.
+type Step = { task: string; recipe?: { id: string }; station?: string };
+const planRecipeIds = new Set<string>();
+for (const sec of d.plan) {
+  for (const st of sec.steps) {
+    const list: Step[] = 'together' in st ? st.together : [st];
+    list.forEach((s) => s.recipe && planRecipeIds.add(s.recipe.id));
+  }
+}
+const allRecipes = new Map(recipes.map((r) => [r.id, r]));
+const popups = await Promise.all(
+  [...planRecipeIds]
+    .map((id) => allRecipes.get(id))
+    .filter((r): r is Recipe => !!r)
+    .map(async (r) => ({ r, Content: (await render(r)).Content })),
+);
+const shortName = (id?: string) => {
+  const r = id ? allRecipes.get(id) : undefined;
+  if (!r) return undefined;
+  return r.data.title.replace(/^(Instant Pot|Mediterranean) /, '').replace(/ (Rice Bowls|Veggie Stir-Fry)$/, '');
+};
+const stationClass = (s?: string) => (s ? 's-' + s.toLowerCase().replace(/[^a-z]+/g, '') : '');
 ---
 
 <Base title={d.title} description={d.description}>
+  <PrepBanner />
   <article class="wrap">
     <header class="phead">
       <p class="eyebrow">Sunday prep · {formatDate(d.date)}{d.draft && ' · Draft (not published)'}</p>
@@ -31,50 +65,91 @@ const hasSlots = d.menu.some((day) => day.meals.some((m) => m.slot));
         <div><dt>Meals</dt><dd>{d.containers}</dd></div>
         {d.people && <div><dt>People</dt><dd>{d.people}</dd></div>}
         <div><dt>Hands-on</dt><dd>{d.activeTime}</dd></div>
-        <div><dt>Recipes</dt><dd>{recipes.length}</dd></div>
       </dl>
     </header>
 
     {
-      d.menu.length > 0 && (
-        <section>
-          <h2>The week</h2>
-          <div class="menu">
-            {d.menu.map((day) => (
-              <div class="day">
-                <p class="dname">{day.day}</p>
+      dishes.length > 0 && (
+        <section class="dishes" aria-labelledby="dishes-h">
+          <h2 id="dishes-h">What you'll have{totalServings > 0 && <span class="count"> · {totalServings} servings</span>}</h2>
+          <div class="dish-cols">
+            {eatFirst.length > 0 && (
+              <div class="dcol first">
+                <p class="dcol-h">Eat first · within 3 days</p>
+                <p class="dcol-sub">Doesn't freeze. Keep in the fridge.</p>
                 <ul>
-                  {day.meals.map((m) => (
+                  {eatFirst.map((x) => (
                     <li>
-                      {hasSlots && m.slot && <span class="slot">{m.slot}</span>}
-                      <span class="dish">{m.dish}</span>
-                      {m.where && <span class={`chip ${whereClass[m.where]}`}>{whereLabel[m.where]}</span>}
+                      {x.recipeId && allRecipes.has(x.recipeId) ? <a href={`/recipes/${x.recipeId}/`}>{x.name}</a> : <span>{x.name}</span>}
+                      {x.servings && <span class="serv">×{x.servings}</span>}
+                      {x.note && <span class="dnote">{x.note}</span>}
                     </li>
                   ))}
                 </ul>
               </div>
-            ))}
+            )}
+            {freezable.length > 0 && (
+              <div class="dcol freeze">
+                <p class="dcol-h">Freezer-friendly</p>
+                <p class="dcol-sub">Freeze what you won't eat in 3 days.</p>
+                <ul>
+                  {freezable.map((x) => (
+                    <li>
+                      {x.recipeId && allRecipes.has(x.recipeId) ? <a href={`/recipes/${x.recipeId}/`}>{x.name}</a> : <span>{x.name}</span>}
+                      {x.servings && <span class="serv">×{x.servings}</span>}
+                      {x.note && <span class="dnote">{x.note}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </section>
       )
     }
 
     {
-      d.timeline.length > 0 && (
-        <section>
-          <h2>Cooking order</h2>
-          <p class="sub">Times are minutes from when you start.</p>
-          <ol class="timeline">
-            {d.timeline.map((t) => (
-              <li>
-                <span class="t">{t.time}</span>
-                <div>
-                  {t.station && <span class="station">{t.station}</span>}
-                  <p>{t.task}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+      d.plan.length > 0 && (
+        <section class="plan" aria-labelledby="plan-h">
+          <h2 id="plan-h">The plan</h2>
+          <p class="hint">Tap a dish name to see its ingredients and steps. Tap a step when it's done.</p>
+          {d.plan.map((sec) => (
+            <div class="psec">
+              <h3>{sec.title}</h3>
+              <ol class="psteps">
+                {sec.steps.map((st) =>
+                  'together' in st ? (
+                    <li class="together">
+                      <p class="tog-h">At the same time</p>
+                      <div class="tog-grid">
+                        {st.together.map((s) => (
+                          <div class:list={['pstep', stationClass(s.station)]}>
+                            <div class="tags">
+                              {s.station && <span class="station">{s.station}</span>}
+                              {s.recipe && shortName(s.recipe.id) && (
+                                <button type="button" class="dish" data-open={`r-${s.recipe.id}`}>{shortName(s.recipe.id)} ›</button>
+                              )}
+                            </div>
+                            <p>{s.task}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </li>
+                  ) : (
+                    <li class:list={['pstep', 'single', stationClass(st.station)]}>
+                      <div class="tags">
+                        {st.station && <span class="station">{st.station}</span>}
+                        {st.recipe && shortName(st.recipe.id) && (
+                          <button type="button" class="dish" data-open={`r-${st.recipe.id}`}>{shortName(st.recipe.id)} ›</button>
+                        )}
+                      </div>
+                      <p>{st.task}</p>
+                    </li>
+                  ),
+                )}
+              </ol>
+            </div>
+          ))}
         </section>
       )
     }
@@ -88,38 +163,147 @@ const hasSlots = d.menu.some((day) => day.meals.some((m) => m.slot));
         <section>
           <h2>Recipes in this prep</h2>
           <div class="grid">
-            {recipes.map((r) => <RecipeCard recipe={r} />)}
+            {recipes.map((r, i) => <RecipeCard recipe={r} index={i} />)}
           </div>
         </section>
       )
     }
   </article>
+
+  {
+    popups.map(({ r, Content: RContent }) => (
+      <dialog id={`r-${r.id}`} class="pop" aria-labelledby={`r-${r.id}-h`}>
+        <div class="pop-head">
+          <h2 id={`r-${r.id}-h`}>{r.data.title}</h2>
+          <form method="dialog">
+            <button class="close" aria-label="Close">✕</button>
+          </form>
+        </div>
+        <div class="pop-body">
+          {r.data.ingredients.length > 0 && (
+            <>
+              <h3 class="pop-sub">Ingredients</h3>
+              <ShoppingList recipe={r} compact />
+            </>
+          )}
+          <h3 class="pop-sub">Steps</h3>
+          <div class="pop-steps">
+            <RContent />
+          </div>
+          <p class="pop-foot">
+            <a href={`/recipes/${r.id}/`}>Open the full recipe →</a>
+          </p>
+        </div>
+      </dialog>
+    ))
+  }
 </Base>
 
+<script>
+  import { makeTappable } from '../../lib/tap';
+  makeTappable(document.querySelectorAll<HTMLElement>('.pstep'));
+  makeTappable(document.querySelectorAll<HTMLElement>('.pop-steps ol > li'));
+
+  document.querySelectorAll<HTMLButtonElement>('[data-open]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById(btn.dataset.open!)?.closest('dialog')?.showModal();
+    });
+  });
+  // Tap outside the pop-up to close it.
+  document.querySelectorAll<HTMLDialogElement>('dialog.pop').forEach((dlg) => {
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) dlg.close();
+    });
+  });
+</script>
+
 <style>
-  .phead { padding: 48px 0 8px; max-width: 48em; }
-  .facts { display: flex; flex-wrap: wrap; margin: 20px 0 0; border: 1px solid var(--line); border-radius: 12px; background: var(--card); width: fit-content; max-width: 100%; }
-  .facts div { padding: 10px 18px; border-right: 1px solid var(--line); }
-  .facts div:last-child { border-right: 0; }
-  .facts dt { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
-  .facts dd { margin: 0; font-weight: 600; }
+  .phead { padding: 40px 0 8px; max-width: 48em; }
+  .facts { display: flex; flex-wrap: wrap; margin: 20px 0 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); width: fit-content; max-width: 100%; }
+  .facts div { padding: 12px 24px 12px 0; margin-right: 24px; }
+  .facts dt { font-family: var(--ui); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+  .facts dd { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.15rem; }
 
-  .menu { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
-  .day { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
-  .dname { font-family: var(--display); font-style: italic; font-weight: 700; font-size: 1.15rem; margin: 0 0 6px; }
-  .day ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-  .day li { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font-size: 0.93rem; line-height: 1.35; }
-  .slot { flex-basis: 100%; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
-  .dish { flex: 1 1 auto; }
+  /* What you'll have */
+  .dishes { margin-top: 48px; }
+  .dishes h2 { margin: 0 0 16px; }
+  .count { font-family: var(--ui); font-size: 1rem; font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
+  .dish-cols { display: grid; gap: 16px; }
+  @media (min-width: 760px) { .dish-cols { grid-template-columns: 1fr 1fr; } }
+  .dcol { padding: 22px 24px; border-radius: var(--radius); }
+  .dcol.first { background: var(--pop-soft); }
+  .dcol.freeze { background: var(--frost-soft); }
+  .dcol-h { margin: 0; font-family: var(--ui); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+  .first .dcol-h { color: var(--pop); }
+  .freeze .dcol-h { color: var(--frost); }
+  .dcol-sub { margin: 2px 0 12px; font-size: 0.95rem; color: var(--ink-2); }
+  .dcol ul { list-style: none; padding: 0; margin: 0; }
+  .dcol li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; padding: 9px 0; border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); font-size: 1.1rem; }
+  .dcol li a { color: var(--ink); text-decoration-color: var(--pop); }
+  .serv { font-family: var(--ui); font-weight: 600; font-size: 0.9rem; color: var(--ink-2); }
+  .dnote { flex-basis: 100%; font-size: 0.9rem; color: var(--ink-3); font-style: italic; }
 
-  .sub { color: var(--ink-3); font-size: 0.9rem; margin-top: -0.4em; }
-  .timeline { list-style: none; padding: 0; margin: 0; max-width: 46em; }
-  .timeline li { display: grid; grid-template-columns: 96px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px dashed var(--line); }
-  .t { font-family: var(--display); font-weight: 600; color: var(--pop); font-variant-numeric: tabular-nums; }
-  .timeline p { margin: 0; }
-  .station { display: inline-block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--saffron); margin-bottom: 2px; }
-  @media (max-width: 480px) { .timeline li { grid-template-columns: 1fr; gap: 2px; } }
+  /* The plan */
+  .plan { margin-top: 56px; max-width: 52em; }
+  .plan h2 { margin: 0; }
+  .hint { margin: 4px 0 8px; font-family: var(--ui); font-size: 0.82rem; color: var(--ink-3); }
+  .psec h3 { margin: 32px 0 12px; font-size: 1.5rem; padding-bottom: 8px; border-bottom: 2px solid var(--pop); display: inline-block; }
+  .psteps { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; counter-reset: pstep; }
+  .pstep {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--line);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s, color 0.15s;
+  }
+  .pstep p { margin: 0; font-size: 1.1rem; line-height: 1.45; }
+  .pstep:hover { border-color: var(--pop); }
+  .pstep:global(.done) { background: var(--paper-2); color: var(--ink-3); }
+  .pstep:global(.done) p { text-decoration: line-through; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+  .tags:empty { display: none; }
+  .station { font-family: var(--ui); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); padding: 3px 0; }
+  .dish {
+    font-family: var(--ui);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 0;
+    background: var(--pop);
+    color: #fff;
+    cursor: pointer;
+  }
+  .dish:hover { filter: brightness(1.08); }
+  /* A colored edge per appliance, so parallel work is easy to see */
+  .s-oven { border-left-color: var(--saffron); }
+  .s-stove { border-left-color: var(--pop); }
+  .s-instantpot { border-left-color: var(--frost); }
+  .together { background: var(--paper-2); border-radius: var(--radius); padding: 12px; }
+  .tog-h { margin: 0 0 8px 4px; font-family: var(--ui); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); }
+  .tog-grid { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
 
-  .body { margin-top: 12px; }
+  .body { margin-top: 24px; }
   section { margin-top: 8px; }
+
+  /* Recipe pop-up */
+  .pop { width: min(640px, calc(100vw - 24px)); max-height: 88vh; padding: 0; border: 0; border-radius: 12px; background: var(--paper); color: var(--ink); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25); }
+  .pop::backdrop { background: rgba(40, 24, 18, 0.45); }
+  .pop-head { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; background: var(--paper); border-bottom: 1px solid var(--line); z-index: 1; }
+  .pop-head h2 { margin: 0; font-size: 1.4rem; }
+  .close { font-size: 1.1rem; background: var(--paper-2); border: 0; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; color: var(--ink); }
+  .pop-body { padding: 8px 20px 20px; }
+  .pop-sub { font-family: var(--ui); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); margin: 18px 0 6px; }
+  .pop-steps :global(> p) { font-style: italic; color: var(--ink-2); }
+  .pop-steps :global(h2) { font-family: var(--ui); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pop); margin: 18px 0 6px; }
+  .pop-steps :global(ol) { padding-left: 1.4em; margin: 0; }
+  .pop-steps :global(ol > li) { padding: 6px 4px; font-size: 1.02rem; cursor: pointer; }
+  .pop-steps :global(ol > li::marker) { color: var(--pop); font-weight: 600; }
+  .pop-steps :global(ol > li.done) { color: var(--ink-3); text-decoration: line-through; }
+  .pop-steps :global(ul) { padding-left: 1.2em; color: var(--ink-2); }
+  .pop-foot { margin: 20px 0 0; font-family: var(--ui); font-weight: 600; }
 </style>

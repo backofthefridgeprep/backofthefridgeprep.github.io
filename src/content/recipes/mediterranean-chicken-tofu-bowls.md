@@ -61,12 +61,12 @@ ingredients:
       - { item: Lettuce, amount: 1–2 handfuls }
       - { item: Tomato, amount: 1/2, note: chopped }
       - { item: Onion, amount: a few thin slices }
-      - { item: "Lemon, olive oil, salt", amount: a squeeze + 1 tsp oil + a pinch }
+      - { item: "Lemon, olive oil, salt", amount: a squeeze + 1 tsp oil + a pinch, aisle: veggies }
 storage:
   fridgeDays: 3
   freezer: true
-  notes: Chicken stays in the fridge for days 1–3 only; day 4 is tofu. Everything after that goes in the freezer, frozen flat. Freeze the tahini sauce too and whisk it after thawing.
-reheat: Move a frozen dabba to the fridge the night before. Microwave covered 3–4 min, stirring halfway, with a splash of water if the rice looks dry. Chicken should reach 165°F. Add sauce and fresh salad after reheating. Reheat once only.
+  notes: "Chicken: fridge, days 1–3 only. Tofu and the rest: freezer, flat. Tahini sauce freezes; whisk after thawing."
+reheat: "Microwave, covered, 3–4 min. Stir halfway. Splash of water on the rice. Chicken to 165°F. Add sauce and salad after. Reheat once only."
 prep: mediterranean-bowls-week
 ---
 

@@ -36,8 +36,7 @@ ingredients:
 storage:
   fridgeDays: 3
   freezer: true
-  notes: Freezes well alongside the cabbage sabzi. Move it to the fridge the night before.
-reheat: Microwave or stovetop. Add a splash of water if it has thickened.
+reheat: "Microwave or stovetop. Splash of water if thick."
 forLittleOnes: Set aside a few plain paneer cubes before they go into the sauce.
 prep: sunday-prep-sept-28
 ---

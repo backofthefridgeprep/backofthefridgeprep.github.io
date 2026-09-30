@@ -2,8 +2,12 @@
 import Base from '../../layouts/Base.astro';
 import RecipeCard from '../../components/RecipeCard.astro';
 import { getRecipes, totalMinutes } from '../../lib/content';
+import { getPhoto } from '../../lib/photos';
 
-const recipes = await getRecipes();
+// Recipes with photos first, then the rest (newest first within each).
+const recipes = (await getRecipes()).sort((a, b) => Number(!!getPhoto(b.data.photo)) - Number(!!getPhoto(a.data.photo)));
+const hasFreezer = recipes.some((r) => r.data.storage?.freezer);
+const hasFridge = recipes.some((r) => !r.data.storage?.freezer);
 
 const cuisines = [...new Set(recipes.flatMap((r) => r.data.cuisine))].sort();
 const times = recipes.map(totalMinutes).filter((t): t is number => t !== undefined);
@@ -37,12 +41,20 @@ const timeOptions = [
           {timeOptions.map((o) => <option value={o.value}>{o.label}</option>)}
         </select>
       </label>
+      <label>
+        <span class="fname">Storage</span>
+        <select id="f-store">
+          <option value="">Fridge or freezer</option>
+          {hasFreezer && <option value="store:freezer">Freezes well</option>}
+          {hasFridge && <option value="store:fridge">Fridge only (eat in 2–4 days)</option>}
+        </select>
+      </label>
       <button type="button" class="clear" hidden>Clear</button>
     </div>
 
-    <p class="empty" hidden>Nothing matches that yet. Try another cuisine or time.</p>
+    <p class="empty" hidden>Nothing matches that yet. Try a different filter.</p>
     <div class="grid" id="recipe-grid">
-      {recipes.map((r) => <RecipeCard recipe={r} />)}
+      {recipes.map((r, i) => <RecipeCard recipe={r} index={i} />)}
     </div>
   </div>
 </Base>
@@ -50,12 +62,13 @@ const timeOptions = [
 <script>
   const cuisine = document.querySelector<HTMLSelectElement>('#f-cuisine')!;
   const time = document.querySelector<HTMLSelectElement>('#f-time')!;
+  const store = document.querySelector<HTMLSelectElement>('#f-store')!;
   const cards = [...document.querySelectorAll<HTMLElement>('#recipe-grid > [data-filters]')];
   const clear = document.querySelector<HTMLButtonElement>('.clear')!;
   const empty = document.querySelector<HTMLElement>('.empty')!;
 
   function apply() {
-    const active = [cuisine.value, time.value].filter(Boolean);
+    const active = [cuisine.value, time.value, store.value].filter(Boolean);
     let shown = 0;
     for (const card of cards) {
       const tags = (card.dataset.filters ?? '').split(' ');
@@ -69,9 +82,11 @@ const timeOptions = [
 
   cuisine.addEventListener('change', apply);
   time.addEventListener('change', apply);
+  store.addEventListener('change', apply);
   clear.addEventListener('click', () => {
     cuisine.value = '';
     time.value = '';
+    store.value = '';
     apply();
   });
 </script>

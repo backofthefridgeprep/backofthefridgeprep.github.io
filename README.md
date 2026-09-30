@@ -1,6 +1,6 @@
 # Back of the Fridge
 
-Sunday meal prep, tested in my kitchen. By Shreya. Live at https://backofthefridgeprep.github.io
+Sunday meal prep, tested in my kitchen. By Shreya. Live at https://backofthefridgeprep.com
 
 Built with [Astro](https://astro.build), deployed to GitHub Pages by GitHub Actions on every push to `main`.
 
@@ -31,7 +31,7 @@ Set `draft: true` to keep something off the live site while you finish it. A rec
 ## Settings
 
 - **Email signup:** with no setup, the button opens an email to backofthefridge.prep@gmail.com. To use a newsletter service, add a repo variable `PUBLIC_SIGNUP_ACTION` (Settings → Secrets and variables → Actions → Variables) set to the service's form URL. The form posts a field named `email`.
-- **Custom domain:** change `site` in `astro.config.mjs` and add `public/CNAME`.
+- **Custom domain:** backofthefridgeprep.com, set in `astro.config.mjs`, `public/CNAME`, and the repo's Settings → Pages.
 
 ## First-time GitHub Pages setup
 

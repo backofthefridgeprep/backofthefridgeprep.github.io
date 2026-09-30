@@ -1,39 +1,38 @@
 ---
-title: Festival Week With Guests
-description: A Ganesh Chaturthi week that starts with one big pooja-day cook and stretches it across leftovers, two guest dinners, salad-kit nights and a freezer meal.
+title: Mutter Paneer & Masale Bhaat Week
+description: One big Sunday cook of mutter paneer, masale bhaat and batata bhaji, with tacos, a quick chicken and a freezer curry for the rest of the week.
 date: 2026-09-27
 draft: true # most dishes still need their own recipe pages
-tags: [indian, festival, guests, leftovers, maharashtrian]
+tags: [indian, maharashtrian, big-batch]
 containers: 7
 activeTime: one big Sunday cook + short weeknight tasks
 recipes: [cauliflower-chickpea-tacos, yogurt-marinated-chicken, freeze-raw-chapati]
-menu:
-  - day: Sun
-    meals:
-      - { slot: Pooja, dish: Puri + shevayachi kheer }
-      - { slot: Dinner, dish: "Mutter paneer, masale bhaat, batata bhaji, puri, kokum sarbat" }
-  - day: Mon
-    meals: [{ dish: Leftover mutter paneer + masale bhaat, where: fridge }]
-  - day: Tue
-    meals: [{ slot: Guests, dish: "Mutter paneer, masale bhaat, batata bhaji, cucumber koshimbir", where: fridge }]
-  - day: Wed
-    meals: [{ slot: Guests, dish: Cauliflower chickpea tacos + the extra batata bhaji, where: fridge }]
-  - day: Thu
-    meals: [{ dish: Salad kit + yogurt-marinated chicken, where: fridge }]
-  - day: Fri
-    meals: [{ dish: Salad kit + seared shrimp (5–7 min), where: fresh }]
-  - day: Sat
-    meals: [{ dish: Thai tofu curry from the freezer, where: freezer }]
-timeline:
-  - { time: Afternoon, task: Thaw chicken in cold water (change water every 30 min)., station: Prep }
-  - { time: Afternoon, task: Soak rice for masale bhaat. Boil and peel potatoes for batata bhaji (double batch)., station: Prep }
-  - { time: Afternoon, task: "Chop onions, make ginger-garlic paste for mutter paneer.", station: Prep }
-  - { time: Afternoon, task: Make puri dough and rest it covered in the fridge., station: Prep }
-  - { time: Afternoon, task: "Mix the kokum sarbat base; pre-measure kheer ingredients.", station: Prep }
-  - { time: Afternoon, task: "Roast cauliflower, cook chickpeas, prep taco toppings.", station: Oven }
-  - { time: Evening, task: Marinate the chicken and refrigerate overnight., station: Prep }
+# TODO(Shreya): servings for each dish, and confirm which ones freeze.
+dishes:
+  - { name: Mutter paneer, freezes: true }
+  - { name: Masale bhaat, freezes: false }
+  - { name: Batata bhaji (double batch), freezes: false }
+  - { name: Puri, freezes: false }
+  - { name: Shevayachi kheer, freezes: false }
+  - { name: Kokum sarbat, freezes: false }
+  - { name: Cauliflower chickpea tacos, recipe: cauliflower-chickpea-tacos, freezes: false }
+  - { name: Yogurt-marinated chicken + salad kit, recipe: yogurt-marinated-chicken, freezes: false }
+  - { name: Thai tofu curry (already in the freezer), freezes: true }
+plan:
+  - title: Afternoon
+    steps:
+      - { task: Thaw the chicken in cold water. Change the water every 30 minutes., recipe: yogurt-marinated-chicken }
+      - { task: Soak the rice for masale bhaat. }
+      - { task: Boil and peel potatoes for the batata bhaji (double batch). }
+      - { task: "Chop onions, make ginger-garlic paste for mutter paneer." }
+      - { task: Make the puri dough. Rest it covered in the fridge. }
+      - { task: "Mix the kokum sarbat base. Measure out the kheer ingredients." }
+      - { task: "Roast the cauliflower, cook the chickpeas, prep the taco toppings.", recipe: cauliflower-chickpea-tacos, station: Oven }
+  - title: Evening
+    steps:
+      - { task: Marinate the chicken. Into the fridge overnight., recipe: yogurt-marinated-chicken }
 ---
 
-<!-- TODO(Shreya): recipes for mutter paneer, masale bhaat, batata bhaji, cucumber koshimbir, puri, shevayachi kheer and kokum sarbat. -->
+<!-- TODO(Shreya): recipes for mutter paneer, masale bhaat, batata bhaji, puri, shevayachi kheer and kokum sarbat. -->
 
-The idea: cook a lot on the festival day, make one dish (batata bhaji) in a double batch on purpose, and give the second guest night a different menu so it doesn't feel like a repeat.
+One big cook on Sunday, with the batata bhaji made in a double batch on purpose so it shows up twice in the week.

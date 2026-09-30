@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { formatDate } from '../../lib/content';
+import { site } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles', ({ data }) => import.meta.env.DEV || !data.draft);
+  return articles.map((article) => ({ params: { id: article.id }, props: { article } }));
+}
+
+interface Props { article: CollectionEntry<'articles'> }
+const { article } = Astro.props;
+const { Content } = await render(article);
+---
+
+<Base title={article.data.title} description={article.data.description}>
+  <article class="wrap">
+    <header class="ahead">
+      <p class="eyebrow"><a href="/tips/">Tips</a> · {formatDate(article.data.date)}</p>
+      <h1>{article.data.title}</h1>
+      <p class="byline script">{site.byline}</p>
+    </header>
+    <div class="prose"><Content /></div>
+    <p class="back"><a href="/tips/">← All tips</a></p>
+  </article>
+</Base>
+
+<style>
+  .ahead { padding: 48px 0 16px; max-width: 38em; }
+  .ahead .eyebrow a { color: inherit; text-decoration: none; }
+  .byline { color: var(--pop); font-size: 1.2rem; margin: 0; }
+  .prose { font-size: 1.12rem; }
+  .prose :global(h2) { margin-top: 1.6em; }
+  .back { margin-top: 40px; font-family: var(--ui); font-weight: 600; }
+</style>

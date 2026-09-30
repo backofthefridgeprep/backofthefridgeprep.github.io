@@ -13,8 +13,7 @@ equipment: [rolling pin, parchment or wax paper, freezer-safe zip-top bag, tawa 
 storage:
   freezer: true
   freezerMonths: 2
-  notes: Keeps about 1–2 months.
-reheat: Cook straight from frozen on a hot tawa, 30–60 seconds longer per side than fresh dough.
+reheat: "Straight from frozen on a hot tawa. No thawing."
 ---
 
 Make the dough a little firmer than usual. Sticky dough fuses together in the freezer, even with parchment.

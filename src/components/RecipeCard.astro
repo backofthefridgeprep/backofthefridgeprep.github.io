@@ -1,24 +1,23 @@
 ---
 import { Image } from 'astro:assets';
 import type { Recipe } from '../lib/content';
-import { formatMinutes, totalMinutes, dietLabel } from '../lib/content';
+import { formatMinutes, totalMinutes } from '../lib/content';
 import TestedStamp from './TestedStamp.astro';
 import { getPhoto } from '../lib/photos';
 
-interface Props { recipe: Recipe }
-const { recipe } = Astro.props;
+interface Props { recipe: Recipe; index?: number }
+const { recipe, index = 0 } = Astro.props;
 const d = recipe.data;
 const photo = getPhoto(d.photo);
 const total = totalMinutes(recipe);
 const time = formatMinutes(total);
 const timeBucket = total === undefined ? '' : total <= 30 ? 'time:30' : total <= 60 ? 'time:60' : 'time:61';
-const diet = d.diet.filter((x) => x !== 'eggless').slice(0, 2);
-// Recipe list filters: cuisine and total time only.
-const filters = [...d.cuisine.map((c) => `cuisine:${c.replace(/\s+/g, '_')}`), timeBucket].filter(Boolean).join(' ');
+const store = d.storage?.freezer ? 'store:freezer' : 'store:fridge';
+// Recipe list filters: cuisine, total time, fridge vs freezer.
+const filters = [...d.cuisine.map((c) => `cuisine:${c.replace(/\s+/g, '_')}`), timeBucket, store].filter(Boolean).join(' ');
 const kicker = d.kind === 'technique' ? 'Technique' : d.course[0] ?? 'Recipe';
-// Placeholder tint rotates so a grid of photo-less cards doesn't look like one block.
-const tints = ['var(--saffron-soft)', 'var(--sage-soft)', 'var(--pop-soft)', 'var(--frost-soft)'];
-const tint = tints[[...recipe.id].reduce((a, c) => a + c.charCodeAt(0), 0) % tints.length];
+// Photo-less cards alternate between two warm tints.
+const tint = index % 2 === 0 ? 'var(--saffron-soft)' : 'var(--pop-soft)';
 ---
 
 <a href={`/recipes/${recipe.id}/`} class="card" data-filters={filters}>
@@ -38,12 +37,9 @@ const tint = tints[[...recipe.id].reduce((a, c) => a + c.charCodeAt(0), 0) % tin
   <div class="body">
     <p class="eyebrow">{kicker}{d.cuisine.length > 0 && ` · ${d.cuisine.join(' · ')}`}</p>
     <h3>{d.title}</h3>
-    <p class="desc">{d.description}</p>
     <div class="meta">
       {d.tested && <TestedStamp date={d.tested.date} by={d.tested.by} size="sm" />}
       {time && <span class="chip">{time}</span>}
-      {diet.map((x) => <span class={`chip ${x.startsWith('contains') ? 'pop' : 'sage'}`}>{dietLabel[x]}</span>)}
-      {d.storage?.freezer && <span class="chip frost">Freezes</span>}
     </div>
   </div>
 </a>
@@ -68,8 +64,7 @@ const tint = tints[[...recipe.id].reduce((a, c) => a + c.charCodeAt(0), 0) % tin
   .draft { position: absolute; top: 10px; left: 10px; }
   .body { display: flex; flex-direction: column; gap: 6px; flex: 1; }
   .eyebrow { margin: 0; }
-  h3 { margin: 0; font-size: 1.4rem; line-height: 1.15; transition: color 0.15s; }
+  h3 { margin: 0; font-size: 1.4rem; line-height: 1.15; transition: color 0.15s; flex: 1; }
   .card:hover h3 { color: var(--pop); }
-  .desc { margin: 0; color: var(--ink-2); font-size: 1rem; line-height: 1.5; flex: 1; }
-  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 6px; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 4px; }
 </style>

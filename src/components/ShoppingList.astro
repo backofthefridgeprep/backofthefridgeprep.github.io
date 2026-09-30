@@ -1,0 +1,66 @@
+---
+// Ingredients grouped like a grocery list (veggies, protein, grains, spices...).
+// No checkboxes: tap the item itself to cross it off.
+import type { Recipe } from '../lib/content';
+import { shoppingList } from '../lib/aisles';
+
+interface Props { recipe: Recipe; compact?: boolean }
+const { recipe, compact = false } = Astro.props;
+const groups = shoppingList(recipe);
+---
+
+<div class:list={['shop', { compact }]}>
+  {
+    groups.map((g) => (
+      <div class="aisle">
+        <h3>{g.label}</h3>
+        <ul>
+          {g.items.map((i) => (
+            <li class="tap">
+              <span class="name">
+                {i.amounts.length > 0 && <strong>{i.amounts.join(' + ')}</strong>} {i.item}
+                {i.optional && <em class="opt"> (optional)</em>}
+              </span>
+              {i.uses.length > 0 && <span class="uses">{i.uses.join(' · ')}</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  import { makeTappable } from '../lib/tap';
+  makeTappable(document.querySelectorAll<HTMLElement>('.shop li.tap'));
+</script>
+
+<style>
+  .shop { columns: 2 340px; column-gap: 48px; }
+  .shop.compact { columns: 1; }
+  .aisle { margin-bottom: 18px; }
+  .aisle h3 { break-after: avoid; font-family: var(--ui); font-size: 0.74rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pop); margin: 0 0 2px; padding-top: 6px; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li {
+    break-inside: avoid;
+    display: flex;
+    flex-direction: column;
+    padding: 11px 4px;
+    border-bottom: 1px dashed var(--line);
+    font-size: 1.1rem;
+    line-height: 1.4;
+    cursor: pointer;
+    border-radius: 4px;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.15s, background 0.15s;
+  }
+  li:last-child { border-bottom: 0; }
+  li:hover { background: var(--paper-2); }
+  li strong { font-weight: 600; }
+  .uses { font-size: 0.9rem; color: var(--ink-3); font-style: italic; }
+  .opt { color: var(--ink-3); font-size: 0.95rem; }
+  li:global(.done) { color: var(--ink-3); }
+  li:global(.done) .name { text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: var(--pop); }
+  li:global(.done) .uses { opacity: 0.6; }
+  .compact li { font-size: 1rem; padding: 8px 2px; }
+</style>

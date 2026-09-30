@@ -1,0 +1,48 @@
+---
+// The same short "Storing and reheating" block on every recipe:
+// labeled rows instead of sentences, so it reads at a glance.
+import type { Recipe } from '../lib/content';
+
+interface Props { recipe: Recipe }
+const { recipe } = Astro.props;
+const d = recipe.data;
+const s = d.storage;
+
+const rows = [
+  { k: 'Cool', v: 'Into the fridge or freezer within 2 hours' },
+  s?.fridgeDays !== undefined && { k: 'Fridge', v: `Up to ${s.fridgeDays} days` },
+  s && {
+    k: 'Freezer',
+    v: s.freezer ? `Yes${s.freezerMonths ? `, up to ${s.freezerMonths} months` : ''}` : `No${s.fridgeDays ? ` — eat within ${s.fridgeDays} days` : ''}`,
+  },
+  s?.freezer && d.kind !== 'technique' && { k: 'Thaw', v: 'Overnight in the fridge' },
+  d.reheat && { k: 'Reheat', v: d.reheat },
+  s?.notes && { k: 'Note', v: s.notes },
+].filter(Boolean) as { k: string; v: string }[];
+---
+
+{
+  (s || d.reheat) && (
+    <section class="store" aria-labelledby="store-h">
+      <h2 id="store-h">Storing and reheating</h2>
+      <dl>
+        {rows.map((r) => (
+          <div>
+            <dt>{r.k}</dt>
+            <dd>{r.v}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  )
+}
+
+<style>
+  .store { margin-top: 44px; max-width: 46em; padding: 22px 26px; border-radius: var(--radius); background: var(--frost-soft); }
+  h2 { margin: 0 0 10px; font-size: 1.35rem; }
+  dl { margin: 0; display: grid; }
+  dl div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; padding: 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--frost) 18%, transparent); }
+  dl div:last-child { border-bottom: 0; }
+  dt { font-family: var(--ui); font-size: 0.74rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--frost); padding-top: 3px; }
+  dd { margin: 0; font-size: 1.05rem; }
+</style>

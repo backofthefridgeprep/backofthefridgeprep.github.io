@@ -1,6 +1,6 @@
 ---
 title: Four Dishes, Twenty Meals
-description: Lunch and dinner for two people, Monday to Friday, from about three hours of Sunday cooking. Oven, Instant Pot and stovetop all run at once.
+description: Lunch and dinner for two people, Monday to Friday, from about three hours of Sunday cooking. Oven, Instant Pot and stove all run at once.
 date: 2026-09-27
 tags: [vegetarian, instant-pot, indian, family, 20-meals]
 containers: 20
@@ -12,56 +12,35 @@ recipes:
   - palak-paneer
   - cabbage-potato-sabzi
   - tofu-edamame-stir-fry
-menu:
-  - day: Mon
-    meals:
-      - { slot: Lunch, dish: Coconut curry dumpling bake + rice, where: fridge }
-      - { slot: Dinner, dish: Black bean soup + grilled cheese, where: fridge }
-  - day: Tue
-    meals:
-      - { slot: Lunch, dish: Coconut curry dumpling bake + rice, where: fridge }
-      - { slot: Dinner, dish: Tofu edamame stir-fry + glass noodles, where: fridge }
-  - day: Wed
-    meals:
-      - { slot: Lunch, dish: Tofu edamame stir-fry + glass noodles, where: fridge }
-      - { slot: Dinner, dish: Black bean soup + grilled cheese, where: fridge }
-  - day: Thu
-    meals:
-      - { slot: Lunch, dish: Tofu edamame stir-fry + glass noodles, where: fridge }
-      - { slot: Dinner, dish: Palak paneer + cabbage sabzi, where: fridge }
-  - day: Fri
-    meals:
-      - { slot: Lunch, dish: Palak paneer + cabbage sabzi, where: freezer }
-      - { slot: Dinner, dish: Black bean soup + grilled cheese, where: freezer }
-timeline:
-  - { time: "0:00", task: Start the rice. Press the tofu under something heavy., station: Stovetop }
-  - { time: "0:05–0:40", task: "Chop everything into five bowls, one per dish. Mince all the garlic and grate all the ginger at once, then divide.", station: Prep }
-  - { time: "0:35", task: Preheat oven to 400°F. Put a big pot of water on to boil., station: Oven }
-  - { time: "0:40", task: "Soup: sauté, deglaze, load. Marinara on top, don't stir.", station: Instant Pot }
-  - { time: "0:50", task: Soup to pressure (8 min)., station: Instant Pot }
-  - { time: "0:50", task: "Dumpling bake in, covered with foil (25 min).", station: Oven }
-  - { time: "0:50", task: Blanch the spinach., station: Stovetop }
-  - { time: "1:00", task: Palak paneer., station: Stovetop }
-  - { time: "1:15", task: Release the soup and stir in spinach. Uncover the bake for 10 more min., station: Instant Pot }
-  - { time: "1:20", task: Cabbage sabzi. Bake comes out around 1:25., station: Stovetop }
-  - { time: "1:45", task: Tofu stir-fry. Don't cook the noodles today., station: Stovetop }
-  - { time: "2:15", task: "Cool 20–30 min uncovered, then portion and label.", station: Pack }
+plan:
+  - title: Get ready
+    steps:
+      - { task: Start the rice., recipe: coconut-curry-dumpling-bake, station: Stove }
+      - { task: Press the tofu under something heavy., recipe: tofu-edamame-stir-fry }
+      - { task: "Chop everything into five bowls, one per dish. Mince all the garlic and grate all the ginger at once, then divide." }
+      - { task: Heat the oven to 400°F. Put a big pot of water on to boil., station: Oven }
+  - title: Cook — three things at once
+    steps:
+      - { task: "Sauté, deglaze, load. Marinara on top, don't stir.", recipe: instant-pot-black-bean-soup, station: Instant Pot }
+      - together:
+          - { task: Pressure cook 8 minutes., recipe: instant-pot-black-bean-soup, station: Instant Pot }
+          - { task: "In the oven, covered with foil, 25 minutes.", recipe: coconut-curry-dumpling-bake, station: Oven }
+          - { task: Blanch the spinach., recipe: palak-paneer, station: Stove }
+      - { task: Make the palak paneer., recipe: palak-paneer, station: Stove }
+      - together:
+          - { task: Release the pressure. Stir in the spinach., recipe: instant-pot-black-bean-soup, station: Instant Pot }
+          - { task: Uncover. 10 more minutes., recipe: coconut-curry-dumpling-bake, station: Oven }
+      - { task: Make the sabzi., recipe: cabbage-potato-sabzi, station: Stove }
+      - { task: "Make the stir-fry. Don't cook the noodles today.", recipe: tofu-edamame-stir-fry, station: Stove }
+  - title: Pack
+    steps:
+      - { task: "Cool everything 20–30 minutes, uncovered." }
+      - { task: Portion into containers and label them. }
+      - { task: "Fridge: dumpling bake and stir-fry. Freezer: 2 soups and 2 palak paneer + sabzi." }
+      - { task: Move a frozen container to the fridge the night before you eat it. }
 ---
 
 Twenty containers sounds like a lot. It's four dishes, and three of them cook at the same time on different appliances.
-
-## Where everything goes
-
-| Dish | Dabbas | Fridge | Freezer |
-| --- | --- | --- | --- |
-| Dumpling bake + rice | 4 | all 4 (Mon, Tue) | — |
-| Black bean soup | 6 | 4 (Mon, Wed) | 2 (Fri) |
-| Tofu stir-fry | 6 | all 6 (Tue–Thu) | — |
-| Palak paneer + sabzi | 4 | 2 (Thu dinner) | 2 (Fri lunch) |
-
-**Wednesday night:** move Friday's soup and the frozen palak paneer + sabzi to the fridge.
-
-Get everything into the fridge or freezer within 2 hours of cooking. Spread the rice on a tray so it cools fast.
 
 ## Equipment
 

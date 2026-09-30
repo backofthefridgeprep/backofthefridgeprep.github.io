@@ -43,7 +43,7 @@ ingredients:
 storage:
   fridgeDays: 4
   freezer: false
-reheat: "Boil the glass noodles 6–8 min, drain, rinse, and toss with a little sesame oil. Heat the stir-fry in a pan with a splash of water, add the noodles, and toss 1–2 min."
+reheat: "Pan with a splash of water, 1–2 min. Cook the noodles fresh."
 forLittleOnes: Soft tofu strips, halved or smashed edamame, and small broccoli florets — set aside before the sauce goes in.
 prep: sunday-prep-sept-28
 ---

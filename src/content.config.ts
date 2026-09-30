@@ -22,6 +22,9 @@ const ingredient = z.object({
   amount: z.coerce.string().optional(),
   note: z.string().optional(),
   optional: z.boolean().default(false),
+  // Shopping section on the recipe page. Usually worked out automatically from the
+  // item name (src/lib/aisles.ts); set it here only when the guess is wrong.
+  aisle: z.enum(['veggies', 'protein', 'grains', 'spices', 'pantry', 'frozen', 'other']).optional(),
 });
 
 const ingredientGroup = z.object({
@@ -116,49 +119,69 @@ const recipes = defineCollection({
       }),
 });
 
+// One step in a Sunday prep plan. `recipe` links the step to its recipe, which
+// shows as a tappable chip that opens that recipe's ingredients and steps.
+const planStep = z.object({
+  task: z.string(),
+  recipe: reference('recipes').optional(),
+  station: z.string().optional(), // "Oven", "Stove", "Instant Pot"
+});
+
 const preps = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/preps' }),
   schema: z.object({
-      title: z.string(),
-      description: z.string(),
-      date: z.coerce.date(), // the Sunday you cook
-      draft: z.boolean().default(false),
-      tags: z.array(z.string()).default([]),
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(), // the Sunday you cook
+    draft: z.boolean().default(false),
+    tags: z.array(z.string()).default([]),
 
-      containers: z.number().int().positive(), // total dabbas / meals
-      people: z.number().int().positive().optional(),
-      activeTime: z.string(), // "about 3 hours"
+    containers: z.number().int().positive(), // total containers / meals
+    people: z.number().int().positive().optional(),
+    activeTime: z.string(), // "about 3 hours"
 
-      photo: z.string().optional(), // file name in src/assets/photos/
-      imageAlt: z.string().optional(),
+    photo: z.string().optional(), // file name in src/assets/photos/
+    imageAlt: z.string().optional(),
 
-      recipes: z.array(reference('recipes')).default([]),
+    recipes: z.array(reference('recipes')).default([]),
 
-      menu: z
-        .array(
-          z.object({
-            day: z.string(), // "Mon", "Day 1"
-            meals: z.array(
-              z.object({
-                slot: z.string().optional(), // "Lunch", "Dinner"
-                dish: z.string(),
-                where: z.enum(['fridge', 'freezer', 'fresh']).optional(),
-              }),
-            ),
-          }),
-        )
-        .default([]),
+    // What the week holds. If left out, it's built from `recipes`
+    // (servings + whether each one freezes).
+    dishes: z
+      .array(
+        z.object({
+          name: z.string(),
+          recipe: reference('recipes').optional(),
+          servings: z.number().int().positive().optional(),
+          freezes: z.boolean(), // false = eat within the first 3 days
+          note: z.string().optional(),
+        }),
+      )
+      .optional(),
 
-      timeline: z
-        .array(
-          z.object({
-            time: z.string(), // "0:00", "0:50–1:20"
-            task: z.string(),
-            station: z.string().optional(), // "Oven", "Stovetop", "Instant Pot"
-          }),
-        )
-        .default([]),
-    }),
+    // The cooking plan, in sections ("Afternoon", "Evening", "Start", "Pack").
+    // A step can be a single task, or `together:` for things that happen at the same time.
+    plan: z
+      .array(
+        z.object({
+          title: z.string(),
+          steps: z.array(z.union([planStep, z.object({ together: z.array(planStep).min(2) })])),
+        }),
+      )
+      .default([]),
+  }),
 });
 
-export const collections = { recipes, preps };
+const articles = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/articles' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    draft: z.boolean().default(false),
+    photo: z.string().optional(),
+    imageAlt: z.string().optional(),
+  }),
+});
+
+export const collections = { recipes, preps, articles };

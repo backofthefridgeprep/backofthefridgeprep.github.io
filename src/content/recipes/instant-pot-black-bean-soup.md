@@ -37,7 +37,7 @@ ingredients:
 storage:
   fridgeDays: 4
   freezer: true
-reheat: Heat on the stove or in the microwave. Add hot water if it's too thick.
+reheat: "Stovetop or microwave. Add hot water if thick."
 forLittleOnes: Scoop out a few soft potato and zucchini pieces for little ones before adding the seasonings.
 prep: sunday-prep-sept-28
 ---

@@ -1,0 +1,16 @@
+---
+// Pop-color banner at the top of the Sunday prep pages.
+---
+
+<div class="banner">
+  <div class="wrap inner">
+    <p class="big">Cook one day. <span class="script">Eat all week.</span></p>
+  </div>
+</div>
+
+<style>
+  .banner { background: var(--pop); color: #fff; padding: clamp(22px, 4vw, 36px) 0; }
+  .inner { display: flex; align-items: center; justify-content: center; text-align: center; }
+  .big { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(1.7rem, 4.5vw, 2.8rem); line-height: 1.1; letter-spacing: -0.01em; font-variation-settings: 'SOFT' 100; }
+  .big .script { font-weight: 500; }
+</style>

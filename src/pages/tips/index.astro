@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { formatDate } from '../../lib/content';
+
+const articles = (await getCollection('articles', ({ data }) => import.meta.env.DEV || !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<Base title="Tips" description="What I've learned from a lot of Sundays: how to plan, shop and cook a week of meals without losing the whole day.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">From my kitchen</p>
+      <h1>Tips <span class="script" style="color:var(--pop)">&amp; notes</span></h1>
+      <p class="lede">What I've learned from a lot of Sundays: planning, shopping, and getting through a week of cooking without losing the whole day.</p>
+    </header>
+    <ul class="list">
+      {
+        articles.map((a) => (
+          <li>
+            <a href={`/tips/${a.id}/`}>
+              <p class="eyebrow">{formatDate(a.data.date)}{a.data.draft && ' · Draft'}</p>
+              <h2>{a.data.title}</h2>
+              <p class="desc">{a.data.description}</p>
+              <span class="more">Read →</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .page-head { padding: 48px 0 24px; }
+  .list { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; max-width: 46em; }
+  .list a { display: block; padding: 24px 26px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); text-decoration: none; }
+  .list a:hover { border-color: var(--pop); }
+  .list a:hover h2 { color: var(--pop); }
+  .list .eyebrow { margin: 0 0 4px; }
+  h2 { margin: 0 0 6px; font-size: 1.6rem; transition: color 0.15s; }
+  .desc { margin: 0 0 10px; color: var(--ink-2); }
+  .more { font-family: var(--ui); font-size: 0.88rem; font-weight: 600; color: var(--pop); }
+</style>
