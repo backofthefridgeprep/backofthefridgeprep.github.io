@@ -6,13 +6,14 @@ import RecipeCard from '../components/RecipeCard.astro';
 import PrepCard from '../components/PrepCard.astro';
 import Signup from '../components/Signup.astro';
 import { getRecipes, getPreps } from '../lib/content';
+import { getPhoto } from '../lib/photos';
 import { site } from '../lib/site';
 import heroPhoto from '../assets/photos/mapo-tofu.jpg';
 
 // Recipes with photos lead; the rest follow by date.
 const recipes = (await getRecipes())
   .filter((r) => r.data.kind === 'recipe')
-  .sort((a, b) => Number(!!b.data.image) - Number(!!a.data.image))
+  .sort((a, b) => Number(!!getPhoto(b.data.photo)) - Number(!!getPhoto(a.data.photo)))
   .slice(0, 6);
 const preps = await getPreps();
 const [latest, ...olderPreps] = preps;

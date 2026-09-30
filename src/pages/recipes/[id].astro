@@ -5,6 +5,7 @@ import TestedStamp from '../../components/TestedStamp.astro';
 import { render, getEntry } from 'astro:content';
 import { getRecipes, formatMinutes, totalMinutes, isoDuration, dietLabel, formatDate } from '../../lib/content';
 import type { Recipe } from '../../lib/content';
+import { getPhoto } from '../../lib/photos';
 import { site } from '../../lib/site';
 
 export async function getStaticPaths() {
@@ -16,14 +17,14 @@ interface Props { recipe: Recipe }
 const { recipe } = Astro.props;
 const d = recipe.data;
 const { Content } = await render(recipe);
+const photo = getPhoto(d.photo);
 
 const prepEntry = d.prep ? await getEntry(d.prep) : undefined;
 const prep = prepEntry && (import.meta.env.DEV || !prepEntry.data.draft) ? prepEntry : undefined;
 
 const total = totalMinutes(recipe);
 const facts = [
-  { k: 'Prep', v: formatMinutes(d.prepMinutes) },
-  { k: 'Cook', v: formatMinutes(d.cookMinutes) },
+  { k: 'Total', v: formatMinutes(total) },
   { k: 'Makes', v: d.servings ? `${d.servings} servings` : undefined },
   { k: 'Fridge', v: d.storage?.fridgeDays ? `${d.storage.fridgeDays} days` : undefined },
   { k: 'Freezer', v: d.storage ? (d.storage.freezer ? (d.storage.freezerMonths ? `${d.storage.freezerMonths} months` : 'Yes') : 'No') : undefined },
@@ -32,7 +33,7 @@ const facts = [
 const ingredientText = (i: { item: string; amount?: string; note?: string }) =>
   [i.amount, i.item].filter(Boolean).join(' ') + (i.note ? `, ${i.note}` : '');
 
-const imageUrl = d.image ? new URL(d.image.src, Astro.site).toString() : undefined;
+const imageUrl = photo ? new URL(photo.src, Astro.site).toString() : undefined;
 
 // schema.org Recipe — used by Google and by Pinterest rich pins.
 const jsonLd: Record<string, unknown> = {
@@ -71,9 +72,9 @@ const jsonLd: Record<string, unknown> = {
 };
 ---
 
-<Base title={d.title} description={d.description} image={d.image?.src} jsonLd={jsonLd}>
+<Base title={d.title} description={d.description} image={photo?.src} jsonLd={jsonLd}>
   <article class="wrap recipe">
-    <header class:list={['rhead', { 'has-photo': !!d.image }]}>
+    <header class:list={['rhead', { 'has-photo': !!photo }]}>
       <div class="rhead-text">
         <p class="eyebrow">
           {d.kind === 'technique' ? 'Technique' : 'Recipe'}
@@ -99,13 +100,13 @@ const jsonLd: Record<string, unknown> = {
           )
         }
         {d.servingNote && <p class="snote">{d.servingNote}</p>}
+        <div class="actions">
+          {d.ingredients.length > 0 && <a class="btn" href="#ingredients">Start cooking</a>}
+          <button type="button" class="btn ghost wake" hidden aria-pressed="false">Keep screen on</button>
+        </div>
       </div>
       <div class="rhead-side">
-        {
-          d.image && (
-            <Image src={d.image} alt={d.imageAlt ?? ''} widths={[500, 900]} sizes="(min-width: 900px) 420px, 100vw" class="rphoto" loading="eager" />
-          )
-        }
+        {photo && <Image src={photo} alt={d.imageAlt ?? ''} widths={[500, 900]} sizes="(min-width: 900px) 420px, 100vw" class="rphoto" loading="eager" />}
         {d.tested && (
           <div class="stamp-wrap">
             <TestedStamp date={d.tested.date} by={d.tested.by} times={d.tested.times} />
@@ -127,12 +128,14 @@ const jsonLd: Record<string, unknown> = {
       )
     }
 
-    <div class="layout">
-      {
-        d.ingredients.length > 0 && (
-          <aside class="ingredients" aria-labelledby="ing-h">
+    {
+      d.ingredients.length > 0 && (
+        <section id="ingredients" class="ingredients" aria-labelledby="ing-h">
+          <div class="sec-head">
             <h2 id="ing-h">Ingredients</h2>
-            <p class="hint">Tap to tick off as you pull things out.</p>
+            <p class="hint">Tap each one as you pull it out.</p>
+          </div>
+          <div class="igroups">
             {d.ingredients.map((g, gi) => (
               <div class="igroup">
                 {g.group && <h3>{g.group}</h3>}
@@ -152,86 +155,139 @@ const jsonLd: Record<string, unknown> = {
                 </ul>
               </div>
             ))}
-            {d.equipment.length > 0 && (
-              <div class="igroup">
-                <h3>Equipment</h3>
-                <p class="equip">{d.equipment.join(' · ')}</p>
-              </div>
-            )}
-          </aside>
+          </div>
+          {d.equipment.length > 0 && (
+            <p class="equip">
+              <span class="eyebrow">You'll need</span> {d.equipment.join(' · ')}
+            </p>
+          )}
+        </section>
+      )
+    }
+
+    <section id="steps" class="steps" aria-labelledby="steps-h">
+      <div class="sec-head">
+        <h2 id="steps-h">{d.kind === 'technique' ? 'How to' : 'Steps'}</h2>
+        <p class="hint">Tap a step when it's done.</p>
+      </div>
+      <div class="steps-body"><Content /></div>
+    </section>
+
+    <div class="after">
+      {
+        (d.storage || d.reheat) && (
+          <section class="box frost-box">
+            <h3>Storing and reheating</h3>
+            {d.storage?.notes && <p>{d.storage.notes}</p>}
+            {d.reheat && <p>{d.reheat}</p>}
+            <p class="small">Cool food and get it into the fridge or freezer within 2 hours of cooking.</p>
+          </section>
         )
       }
 
-      <div class="method">
-        <h2 class="method-h">{d.kind === 'technique' ? 'How to' : 'Method'}</h2>
-        <div class="prose"><Content /></div>
+      {
+        d.forLittleOnes && (
+          <section class="box saffron-box">
+            <h3>For little ones</h3>
+            <p>{d.forLittleOnes}</p>
+          </section>
+        )
+      }
 
-        {
-          (d.storage || d.reheat) && (
-            <section class="box frost-box">
-              <h3>Storing and reheating</h3>
-              {d.storage?.notes && <p>{d.storage.notes}</p>}
-              {d.reheat && <p>{d.reheat}</p>}
-              <p class="small">Cool food and get it into the fridge or freezer within 2 hours of cooking.</p>
-            </section>
-          )
-        }
-
-        {
-          d.forLittleOnes && (
-            <section class="box saffron-box">
-              <h3>For little ones</h3>
-              <p>{d.forLittleOnes}</p>
-            </section>
-          )
-        }
-
-        {
-          d.nutrition && (
-            <section class="box">
-              <h3>Nutrition per serving <span class="chip">estimated</span></h3>
-              <dl class="nutri">
-                <div><dt>Calories</dt><dd>{d.nutrition.perServing.calories}</dd></div>
-                <div><dt>Protein</dt><dd>{d.nutrition.perServing.proteinG} g</dd></div>
-                <div><dt>Carbs</dt><dd>{d.nutrition.perServing.carbsG} g</dd></div>
-                <div><dt>Fat</dt><dd>{d.nutrition.perServing.fatG} g</dd></div>
-                {d.nutrition.perServing.fiberG !== undefined && <div><dt>Fiber</dt><dd>{d.nutrition.perServing.fiberG} g</dd></div>}
-                {d.nutrition.perServing.sodiumMg !== undefined && <div><dt>Sodium</dt><dd>{d.nutrition.perServing.sodiumMg} mg</dd></div>}
-              </dl>
-              <p class="small">Estimated from {d.nutrition.source}. Not medical advice.</p>
-            </section>
-          )
-        }
-
-        <footer class="rfoot">
-          {d.tested && (
-            <p>
-              Cooked and tested by {d.tested.by} on {formatDate(d.tested.date)}
-              {d.tested.times && `, made ${d.tested.times} times so far`}.
-            </p>
-          )}
-          {prep && (
-            <p>
-              Part of the Sunday prep <a href={`/preps/${prep.id}/`}>{prep.data.title}</a> ({formatDate(prep.data.date)}).
-            </p>
-          )}
-          {d.source.kind === 'adapted' && d.source.credit && (
-            <p>Adapted from {d.source.url ? <a href={d.source.url}>{d.source.credit}</a> : d.source.credit}, rewritten after cooking it my way.</p>
-          )}
-        </footer>
-      </div>
+      {
+        d.nutrition && (
+          <section class="box">
+            <h3>Nutrition per serving <span class="chip">estimated</span></h3>
+            <dl class="nutri">
+              <div><dt>Calories</dt><dd>{d.nutrition.perServing.calories}</dd></div>
+              <div><dt>Protein</dt><dd>{d.nutrition.perServing.proteinG} g</dd></div>
+              <div><dt>Carbs</dt><dd>{d.nutrition.perServing.carbsG} g</dd></div>
+              <div><dt>Fat</dt><dd>{d.nutrition.perServing.fatG} g</dd></div>
+              {d.nutrition.perServing.fiberG !== undefined && <div><dt>Fiber</dt><dd>{d.nutrition.perServing.fiberG} g</dd></div>}
+              {d.nutrition.perServing.sodiumMg !== undefined && <div><dt>Sodium</dt><dd>{d.nutrition.perServing.sodiumMg} mg</dd></div>}
+            </dl>
+            <p class="small">Estimated from {d.nutrition.source}. Not medical advice.</p>
+          </section>
+        )
+      }
     </div>
+
+    <footer class="rfoot">
+      {d.tested && (
+        <p>
+          Cooked and tested by {d.tested.by} on {formatDate(d.tested.date)}
+          {d.tested.times && `, made ${d.tested.times} times so far`}.
+        </p>
+      )}
+      {prep && (
+        <p>
+          Part of the Sunday prep <a href={`/preps/${prep.id}/`}>{prep.data.title}</a> ({formatDate(prep.data.date)}).
+        </p>
+      )}
+      {d.source.kind === 'adapted' && d.source.credit && (
+        <p>Adapted from {d.source.url ? <a href={d.source.url}>{d.source.credit}</a> : d.source.credit}, rewritten after cooking it my way.</p>
+      )}
+    </footer>
   </article>
 </Base>
 
+<script>
+  // Tap a step to mark it done.
+  document.querySelectorAll<HTMLLIElement>('.steps-body ol > li').forEach((li) => {
+    li.tabIndex = 0;
+    li.setAttribute('role', 'checkbox');
+    li.setAttribute('aria-checked', 'false');
+    const toggle = (e: Event) => {
+      if ((e.target as HTMLElement).closest('a')) return;
+      const done = li.classList.toggle('done');
+      li.setAttribute('aria-checked', String(done));
+    };
+    li.addEventListener('click', toggle);
+    li.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        toggle(e);
+      }
+    });
+  });
+
+  // Keep the screen from locking while cooking (supported on most phones).
+  const wakeBtn = document.querySelector<HTMLButtonElement>('.wake');
+  if (wakeBtn && 'wakeLock' in navigator) {
+    let lock: WakeLockSentinel | null = null;
+    wakeBtn.hidden = false;
+    const setOn = (on: boolean) => {
+      wakeBtn.setAttribute('aria-pressed', String(on));
+      wakeBtn.textContent = on ? 'Screen stays on ✓' : 'Keep screen on';
+    };
+    wakeBtn.addEventListener('click', async () => {
+      try {
+        if (lock) {
+          await lock.release();
+          lock = null;
+          setOn(false);
+        } else {
+          lock = await navigator.wakeLock.request('screen');
+          setOn(true);
+          lock.addEventListener('release', () => {
+            lock = null;
+            setOn(false);
+          });
+        }
+      } catch {
+        setOn(false);
+      }
+    });
+  }
+</script>
+
 <style>
-  .rhead { display: grid; gap: 32px; padding: 52px 0 12px; align-items: start; }
-  .rhead.has-photo { padding-top: 40px; }
-  @media (min-width: 900px) { .rhead.has-photo { grid-template-columns: 1fr 420px; gap: 56px; } }
+  .rhead { display: grid; gap: 32px; padding: 48px 0 12px; align-items: start; }
+  @media (min-width: 900px) { .rhead.has-photo { grid-template-columns: 1fr 400px; gap: 56px; } }
   .rhead-text { max-width: 46em; }
   .rhead h1 { font-size: clamp(2.3rem, 5vw, 3.4rem); }
   .rhead-side { position: relative; }
-  .rhead :global(.rphoto) { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius); }
+  .rhead :global(.rphoto) { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: var(--radius); }
   .has-photo .stamp-wrap { position: absolute; right: -14px; bottom: -22px; background: var(--paper); border-radius: 50%; padding: 6px; }
   .rhead:not(.has-photo) { grid-template-columns: 1fr auto; }
   .rhead:not(.has-photo) .stamp-wrap { padding-top: 24px; }
@@ -241,47 +297,94 @@ const jsonLd: Record<string, unknown> = {
     .has-photo .stamp-wrap { right: 8px; }
   }
 
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 24px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 22px; }
   .facts { display: flex; flex-wrap: wrap; margin: 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); width: fit-content; max-width: 100%; }
   .facts div { padding: 12px 22px 12px 0; margin-right: 22px; }
   .facts dt { font-family: var(--ui); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
   .facts dd { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.15rem; }
   .snote { margin: 12px 0 0; color: var(--ink-3); font-size: 0.95rem; font-style: italic; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+  .wake[aria-pressed='true'] { background: var(--sage-soft); color: var(--sage); box-shadow: none; }
 
-  .changed { margin-top: 40px; padding: 26px 30px; border-left: 3px solid var(--pop); background: var(--pop-soft); border-radius: 0 var(--radius) var(--radius) 0; max-width: 46em; }
+  .changed { margin-top: 44px; padding: 26px 30px; border-left: 3px solid var(--pop); background: var(--pop-soft); border-radius: 0 var(--radius) var(--radius) 0; max-width: 46em; }
   .changed h2 { margin: 0 0 8px; font-size: 1.6rem; color: var(--pop); }
   .changed ul { margin: 0; padding-left: 1.2em; }
-  .changed li { margin-bottom: 0.4em; }
 
-  .layout { display: grid; gap: 44px; margin-top: 48px; }
-  @media (min-width: 900px) { .layout { grid-template-columns: minmax(300px, 380px) 1fr; gap: 64px; } }
+  /* Section headers for Ingredients and Steps */
+  .sec-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; margin-bottom: 16px; }
+  .sec-head h2 { margin: 0; font-size: clamp(1.9rem, 4vw, 2.4rem); }
+  .hint { margin: 0; font-family: var(--ui); font-size: 0.82rem; color: var(--ink-3); }
 
-  .ingredients { align-self: start; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
-  @media (min-width: 900px) { .ingredients { position: sticky; top: 88px; max-height: calc(100vh - 104px); overflow-y: auto; } }
-  .ingredients h2 { margin: 0 0 2px; font-size: 1.6rem; }
-  .hint { font-family: var(--ui); font-size: 0.76rem; color: var(--ink-3); margin: 0 0 12px; }
-  .igroup h3 { font-family: var(--ui); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pop); margin: 20px 0 6px; }
+  /* Ingredients: one big box, no inner scrolling, large tap targets */
+  .ingredients { margin-top: 56px; padding: 28px clamp(18px, 3vw, 36px) 20px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); scroll-margin-top: 84px; }
+  .igroups { columns: 2 340px; column-gap: 48px; }
+  .igroup { margin-bottom: 18px; }
+  .igroup li { break-inside: avoid; }
+  .igroup h3 { break-after: avoid; font-family: var(--ui); font-size: 0.74rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pop); margin: 0 0 4px; padding-top: 6px; }
   .igroup ul { list-style: none; padding: 0; margin: 0; }
   .igroup li { border-bottom: 1px dashed var(--line); }
   .igroup li:last-child { border-bottom: 0; }
-  label { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; cursor: pointer; font-size: 1rem; line-height: 1.4; }
+  label { display: flex; gap: 14px; align-items: flex-start; padding: 11px 0; cursor: pointer; font-size: 1.1rem; line-height: 1.4; }
   label strong { font-weight: 600; }
-  input[type='checkbox'] { accent-color: var(--pop); width: 17px; height: 17px; margin-top: 3px; flex: none; }
+  input[type='checkbox'] { accent-color: var(--pop); width: 22px; height: 22px; margin-top: 2px; flex: none; cursor: pointer; }
   input:checked + span { color: var(--ink-3); text-decoration: line-through; }
-  .inote { display: block; font-size: 0.86rem; color: var(--ink-3); font-style: italic; }
-  .opt { color: var(--ink-3); font-size: 0.9rem; }
-  .equip { font-size: 0.95rem; color: var(--ink-2); margin: 0; }
+  .inote { display: block; font-size: 0.92rem; color: var(--ink-3); font-style: italic; }
+  .opt { color: var(--ink-3); font-size: 0.95rem; }
+  .equip { margin: 10px 0 4px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 1rem; color: var(--ink-2); }
+  .equip .eyebrow { margin-right: 8px; }
 
-  .method-h { margin-top: 0; font-size: 1.9rem; }
-  .box { margin-top: 32px; padding: 22px 26px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); max-width: 38em; }
+  /* Steps: big, numbered, tap to mark done */
+  .steps { margin-top: 56px; max-width: 46em; scroll-margin-top: 84px; }
+  .steps-body :global(> p) { font-size: 1.12rem; color: var(--ink-2); font-style: italic; }
+  .steps-body :global(h2) { font-family: var(--ui); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pop); margin: 34px 0 10px; }
+  .steps-body :global(ol) { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+  .steps-body :global(ol > li) {
+    counter-increment: step;
+    position: relative;
+    padding: 14px 16px 14px 64px;
+    margin-bottom: 8px;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .steps-body :global(ol > li::before) {
+    content: counter(step);
+    position: absolute;
+    left: 16px;
+    top: 13px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--pop);
+    color: #fff8f0;
+    font-family: var(--ui);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .steps-body :global(ol > li:hover) { border-color: var(--pop); }
+  .steps-body :global(ol > li.done) { background: var(--paper-2); color: var(--ink-3); text-decoration: line-through; text-decoration-color: var(--ink-3); }
+  .steps-body :global(ol > li.done::before) { content: '✓'; background: var(--sage); }
+  .steps-body :global(ul) { padding-left: 1.2em; font-size: 1.05rem; color: var(--ink-2); }
+  .steps-body :global(ul li) { margin-bottom: 0.4em; }
+  .steps-body :global(strong) { font-weight: 600; }
+
+  .after { display: grid; gap: 16px; margin-top: 44px; max-width: 46em; }
+  .box { padding: 22px 26px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); }
   .box h3 { margin-bottom: 8px; display: flex; gap: 10px; align-items: center; }
-  .box p { margin-bottom: 0.5em; }
+  .box p { margin-bottom: 0.5em; font-size: 1.05rem; }
   .frost-box { background: var(--frost-soft); border-color: transparent; }
   .saffron-box { background: var(--saffron-soft); border-color: transparent; }
-  .small { font-family: var(--ui); font-size: 0.78rem; color: var(--ink-3); }
+  .small { font-family: var(--ui); font-size: 0.78rem !important; color: var(--ink-3); }
   .nutri { display: flex; flex-wrap: wrap; gap: 8px 26px; margin: 6px 0 10px; }
   .nutri dt { font-family: var(--ui); font-size: 0.7rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.1em; }
   .nutri dd { margin: 0; font-weight: 600; }
-  .rfoot { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 1rem; font-style: italic; max-width: 38em; }
+  .rfoot { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 1rem; font-style: italic; max-width: 46em; }
   .rfoot p { margin: 0 0 0.4em; }
 </style>

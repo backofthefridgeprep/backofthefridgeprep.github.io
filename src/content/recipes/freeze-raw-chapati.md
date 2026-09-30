@@ -17,16 +17,17 @@ storage:
 reheat: Cook straight from frozen on a hot tawa, 30–60 seconds longer per side than fresh dough.
 ---
 
-Fresh chapati on a weeknight without rolling anything. The one thing that matters is the dough: make it a little firmer than usual. If it's wet or sticky, even parchment won't stop the stack from fusing.
+Make the dough a little firmer than usual. Sticky dough fuses together in the freezer, even with parchment.
 
 ## Freeze
 
-1. Roll the chapatis out as usual. They stay uncooked, and the dough doesn't need oil.
-2. Stack them with a sheet of parchment or wax paper between each one.
-3. Slide the stack into a freezer-safe zip-top bag and press out as much air as you can.
-4. Lay the bag flat in the freezer until the chapatis are frozen solid. Don't stand it up before then or they'll warp.
+1. Roll out the chapatis as usual. Don't cook them.
+2. Stack them with parchment between each one.
+3. Slide into a zip-top bag. Press out the air.
+4. Lay the bag flat in the freezer until frozen solid.
 
 ## Cook
 
 1. Heat the tawa. Don't thaw the chapati.
-2. Cook straight from frozen, 30–60 seconds longer per side than fresh dough. Flip once bubbles form.
+2. Cook from frozen, 30–60 seconds longer per side than fresh.
+3. Flip once bubbles form.

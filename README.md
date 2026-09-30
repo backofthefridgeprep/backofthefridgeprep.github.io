@@ -24,7 +24,7 @@ YAML gotcha: in the `{ item: ..., note: ... }` style, any value containing a com
 
 Set `draft: true` to keep something off the live site while you finish it. A recipe can only be published once it has a `tested:` block (the date you cooked it) — the build fails otherwise.
 
-**Photos** go in `src/assets/photos/`. Reference them from a recipe with `image: ../../assets/photos/<file>.jpg` plus an `imageAlt`. Astro resizes and compresses them at build time.
+**Photos** go in `src/assets/photos/`. On the recipe, add `photo: palak_paneer.jpg` (just the file name) and an `imageAlt`. Astro resizes and compresses them at build time. If the file isn't there yet, the page shows a "photo coming" tile.
 
 **Brand strings** (name, byline, tagline, email, Pinterest) live in `src/lib/site.ts`.
 

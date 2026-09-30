@@ -1,31 +1,17 @@
 ---
 import Base from '../../layouts/Base.astro';
 import RecipeCard from '../../components/RecipeCard.astro';
-import { getRecipes, dietLabel } from '../../lib/content';
+import { getRecipes, totalMinutes } from '../../lib/content';
 
 const recipes = await getRecipes();
 
-const count = (values: string[]) => {
-  const m = new Map<string, number>();
-  values.forEach((v) => m.set(v, (m.get(v) ?? 0) + 1));
-  return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-};
-
-const groups = [
-  {
-    name: 'Diet',
-    options: count(recipes.flatMap((r) => r.data.diet.filter((d) => !d.startsWith('contains') && d !== 'eggless'))).map(([v]) => ({ value: v, label: dietLabel[v] })),
-  },
-  {
-    name: 'Cuisine',
-    options: count(recipes.flatMap((r) => r.data.cuisine)).map(([v]) => ({ value: `cuisine:${v}`, label: v })),
-  },
-  {
-    name: 'Course',
-    options: count(recipes.flatMap((r) => r.data.course)).map(([v]) => ({ value: `course:${v}`, label: v[0].toUpperCase() + v.slice(1) })),
-  },
-  { name: 'Storage', options: [{ value: 'freezer', label: 'Freezes well' }] },
-].filter((g) => g.options.length > 0);
+const cuisines = [...new Set(recipes.flatMap((r) => r.data.cuisine))].sort();
+const times = recipes.map(totalMinutes).filter((t): t is number => t !== undefined);
+const timeOptions = [
+  { value: 'time:30', label: '30 min or less', show: times.some((t) => t <= 30) },
+  { value: 'time:60', label: '30–60 min', show: times.some((t) => t > 30 && t <= 60) },
+  { value: 'time:61', label: 'Over 1 hour', show: times.some((t) => t > 60) },
+].filter((o) => o.show);
 ---
 
 <Base title="Recipes" description="Meal-prep recipes that keep in the fridge or freezer: Indian, Mediterranean, Asian and more.">
@@ -36,23 +22,25 @@ const groups = [
       <p class="lede">Every dish here has been cooked in my kitchen, packed into containers, and reheated midweek before it went up.</p>
     </header>
 
-    <div class="filters" role="group" aria-label="Filter recipes">
-      {
-        groups.map((g) => (
-          <div class="fgroup" data-group={g.name}>
-            <span class="fname">{g.name}</span>
-            {g.options.map((o) => (
-              <button type="button" class="fbtn" data-value={o.value} aria-pressed="false">
-                {o.label}
-              </button>
-            ))}
-          </div>
-        ))
-      }
-      <button type="button" class="clear" hidden>Clear filters</button>
+    <div class="filters">
+      <label>
+        <span class="fname">Cuisine</span>
+        <select id="f-cuisine">
+          <option value="">All cuisines</option>
+          {cuisines.map((c) => <option value={`cuisine:${c.replace(/\s+/g, '_')}`}>{c}</option>)}
+        </select>
+      </label>
+      <label>
+        <span class="fname">Time</span>
+        <select id="f-time">
+          <option value="">Any time</option>
+          {timeOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+        </select>
+      </label>
+      <button type="button" class="clear" hidden>Clear</button>
     </div>
 
-    <p class="empty" hidden>Nothing matches all of those yet. Try removing a filter.</p>
+    <p class="empty" hidden>Nothing matches that yet. Try another cuisine or time.</p>
     <div class="grid" id="recipe-grid">
       {recipes.map((r) => <RecipeCard recipe={r} />)}
     </div>
@@ -60,14 +48,14 @@ const groups = [
 </Base>
 
 <script>
-  // One active option per group; a card must match every active group.
-  const buttons = [...document.querySelectorAll<HTMLButtonElement>('.fbtn')];
+  const cuisine = document.querySelector<HTMLSelectElement>('#f-cuisine')!;
+  const time = document.querySelector<HTMLSelectElement>('#f-time')!;
   const cards = [...document.querySelectorAll<HTMLElement>('#recipe-grid > [data-filters]')];
   const clear = document.querySelector<HTMLButtonElement>('.clear')!;
   const empty = document.querySelector<HTMLElement>('.empty')!;
 
   function apply() {
-    const active = buttons.filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.dataset.value!);
+    const active = [cuisine.value, time.value].filter(Boolean);
     let shown = 0;
     for (const card of cards) {
       const tags = (card.dataset.filters ?? '').split(' ');
@@ -79,38 +67,43 @@ const groups = [
     empty.hidden = shown > 0;
   }
 
-  for (const b of buttons) {
-    b.addEventListener('click', () => {
-      const on = b.getAttribute('aria-pressed') === 'true';
-      b.closest('.fgroup')!.querySelectorAll('.fbtn').forEach((x) => x.setAttribute('aria-pressed', 'false'));
-      b.setAttribute('aria-pressed', String(!on));
-      apply();
-    });
-  }
+  cuisine.addEventListener('change', apply);
+  time.addEventListener('change', apply);
   clear.addEventListener('click', () => {
-    buttons.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+    cuisine.value = '';
+    time.value = '';
     apply();
   });
 </script>
 
 <style>
   .page-head { padding: 48px 0 8px; }
-  .filters { display: grid; gap: 10px; margin: 16px 0 28px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  .fgroup { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-  .fname { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); width: 76px; }
-  .fbtn {
-    font: inherit;
-    font-size: 0.88rem;
-    padding: 0.28em 0.8em;
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px 20px;
+    margin: 20px 0 32px;
+    padding: 18px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .filters label { display: grid; gap: 6px; flex: 1 1 200px; max-width: 280px; }
+  .fname { font-family: var(--ui); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+  select {
+    font-family: var(--ui);
+    font-size: 1rem;
+    padding: 0.65em 2.4em 0.65em 1em;
     border-radius: 999px;
     border: 1px solid var(--line);
-    background: var(--card);
-    color: var(--ink-2);
+    background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23c8431f' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat right 1em center;
+    color: var(--ink);
+    appearance: none;
     cursor: pointer;
+    min-height: 46px;
   }
-  .fbtn:hover { border-color: var(--pop); }
-  .fbtn[aria-pressed='true'] { background: var(--pop); border-color: var(--pop); color: var(--paper); }
-  .clear { justify-self: start; font: inherit; font-size: 0.85rem; background: none; border: 0; color: var(--pop); cursor: pointer; padding: 0; text-decoration: underline; }
+  select:hover { border-color: var(--pop); }
+  .clear { font-family: var(--ui); font-size: 0.9rem; background: none; border: 0; color: var(--pop); cursor: pointer; padding: 12px 4px; text-decoration: underline; }
   .empty { color: var(--ink-2); }
   :global(#recipe-grid > [hidden]) { display: none; }
 </style>

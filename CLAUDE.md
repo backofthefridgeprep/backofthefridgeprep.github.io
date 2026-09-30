@@ -17,7 +17,10 @@ Shreya is strong in Python/ML and newer to frontend. Explain frontend changes br
 - Recipes: `src/content/recipes/<slug>.md`. Preps: `src/content/preps/<slug>.md`. Schema: `src/content.config.ts`. Brand strings: `src/lib/site.ts`.
 - Structured data in frontmatter, method in the Markdown body. This data will feed the "reverse recipe" agent later, so keep it consistent.
 - `changes:` = "What I changed" notes, in her words. Don't invent them.
-- Photos: her own only, in `src/assets/photos/`, with `imageAlt`. No AI-generated food images.
+- Photos: her own only. Drop the file in `src/assets/photos/` and set `photo: <file name>` plus `imageAlt` on the recipe. A missing file shows a placeholder (warning in the build log), not an error. No AI-generated food images.
+- Recipe steps: short, plain sentences, one action per step, and self-contained (no "see the prep page"). Use `## Group` headings only when a recipe has more than one part.
+- Recipe page is built for cooking: big ingredient checklist (no inner scroll), tap-to-mark-done steps, keep-screen-on button. Keep it simple.
+- Recipe list filters: cuisine and total time only.
 - YAML: in `{ item: ..., note: ... }` flow style, quote any value containing a comma, or it silently splits.
 - `draft: true` keeps a file off the live site.
 - Nutrition is always labeled "estimated" (USDA FoodData Central). No health claims; use careful wording like "lower in saturated fat". Footer has a "not medical advice" note.
@@ -27,7 +30,7 @@ Shreya is strong in Python/ML and newer to frontend. Explain frontend changes br
 ## Brand
 - Voice: first person, plain, warm, unfussy. Audience: busy working parents who prep once a week.
 - Look: warm and bright (warm off-white #fffcf7 background, espresso brown text and bands), paprika red as the one pop color, saffron for the tested stamp. Fonts: Fraunces (display, italic "script" accents), Newsreader (body), Instrument Sans (labels).
-- Logo: text only — "BotF" monogram, stacked "Back of / the Fridge" wordmark.
+- Logo: text only — "BotF" monogram with a paprika B, stacked "Back of / the Fridge" wordmark (weight 600). Favicon: paprika B on off-white.
 - Email: backofthefridge.prep@gmail.com. Pinterest: https://www.pinterest.com/backofthefridgeprep/
 - Instagram is out of scope for now; Pinterest + LinkedIn build-in-public.
 

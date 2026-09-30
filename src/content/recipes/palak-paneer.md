@@ -4,6 +4,8 @@ description: Blanched spinach blended smooth with green chilies, simmered with a
 date: 2026-09-27
 tested:
   date: 2026-09-27
+photo: palak_paneer.jpg
+imageAlt: A bowl of palak paneer
 cuisine: [Indian]
 course: [main]
 diet: [vegetarian, eggless]
@@ -40,11 +42,15 @@ forLittleOnes: Set aside a few plain paneer cubes before they go into the sauce.
 prep: sunday-prep-sept-28
 ---
 
-Blanching and shocking the spinach keeps it bright green, even after a few days in the fridge. We eat it with the [cabbage-potato sabzi](/recipes/cabbage-potato-sabzi/).
+Blanching the spinach and dropping it in ice water keeps it bright green all week. Good with the [cabbage-potato sabzi](/recipes/cabbage-potato-sabzi/).
 
-1. Bring a large pot of water to a boil. Drop in the spinach for 2 minutes, then move it to ice water. Squeeze lightly.
-2. Blend the spinach with the green chilies and a few tablespoons of water until smooth.
-3. Heat the oil in a pan. Add the cumin seeds; when they sizzle, add the onion and cook 6–7 minutes until golden.
-4. Add the garlic and ginger for 1 minute. Add the tomatoes, turmeric, coriander, chili powder and salt, and cook 5 minutes until soft.
-5. Add the spinach purée and 1/2 cup water. Simmer 5 minutes.
-6. Stir in the cream (or milk), garam masala and kasuri methi. Add the drained paneer and simmer 2 minutes. Turn off the heat.
+1. Keep the paneer cubes in warm water so they stay soft.
+2. Boil a big pot of water. Add the spinach for 2 minutes.
+3. Move it to ice water. Squeeze lightly.
+4. Blend the spinach with the green chilies and a splash of water until smooth.
+5. Heat oil in a pan. Add cumin seeds. When they sizzle, add the onion. Cook 6–7 minutes until golden.
+6. Add garlic and ginger. Cook 1 minute.
+7. Add tomatoes, turmeric, coriander, chili powder and salt. Cook 5 minutes until soft.
+8. Add the spinach purée and 1/2 cup water. Simmer 5 minutes.
+9. Stir in the cream, garam masala and kasuri methi.
+10. Add the drained paneer. Simmer 2 minutes. Heat off.

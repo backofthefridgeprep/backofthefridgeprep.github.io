@@ -33,10 +33,11 @@ forLittleOnes: Soft potato cubes are easy to set aside before the chili goes in.
 prep: sunday-prep-sept-28
 ---
 
-Half a cabbage cooks down to four servings. Pairs with [palak paneer](/recipes/palak-paneer/) in the same dabba.
+Half a cabbage cooks down to four servings. Goes in the same container as the [palak paneer](/recipes/palak-paneer/).
 
-1. Heat the oil. Add the mustard seeds; when they pop, add the cumin and hing.
-2. Add the onion and cook 3 minutes.
-3. Add the potato, turmeric and salt. Cover and cook 5 minutes on medium-low.
-4. Add the cabbage, chili powder and coriander. Stir, cover, and cook 10–12 minutes until tender.
-5. Uncover and cook 2–3 minutes more to dry out any water.
+1. Heat the oil. Add mustard seeds.
+2. When they pop, add cumin and hing.
+3. Add the onion. Cook 3 minutes.
+4. Add potato, turmeric and salt. Cover. Cook 5 minutes on medium-low.
+5. Add cabbage, chili powder and coriander. Stir, cover, cook 10–12 minutes until tender.
+6. Uncover. Cook 2–3 minutes to dry it out.

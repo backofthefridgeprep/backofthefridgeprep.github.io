@@ -48,11 +48,17 @@ forLittleOnes: Soft tofu strips, halved or smashed edamame, and small broccoli f
 prep: sunday-prep-sept-28
 ---
 
-Keep the veg a little underdone today. It softens when you reheat it later in the week, and the noodles stay springy because you cook them fresh.
+Keep the veg a little crisp today. It softens when you reheat it. Cook the noodles fresh on the day you eat.
 
-1. Put all the sauce ingredients in a jar and shake.
-2. Toss the tofu with the cornstarch and soy sauce. Pan-fry in 2 tbsp oil over medium-high heat for 8–10 minutes, turning, until golden. Remove.
-3. Add 1 tbsp oil. On high heat, cook the broccoli and mushrooms for 4 minutes.
-4. Add the bell peppers, cabbage and edamame for 2–3 minutes. Keep them crisp.
-5. Return the tofu, pour in the sauce, and stir 1–2 minutes until glossy and thick.
-6. Don't cook the noodles yet — they go in on the day you eat.
+1. Shake all the sauce ingredients in a jar.
+2. Toss the tofu with cornstarch and soy sauce.
+3. Pan-fry the tofu in 2 tbsp oil on medium-high, 8–10 minutes, until golden. Take it out.
+4. Add 1 tbsp oil. High heat. Cook broccoli and mushrooms 4 minutes.
+5. Add peppers, cabbage and edamame. Cook 2–3 minutes.
+6. Add the tofu back. Pour in the sauce. Stir 1–2 minutes until glossy.
+
+## On the day you eat
+
+1. Boil the glass noodles 6–8 minutes. Drain, rinse, toss with a little sesame oil.
+2. Heat the stir-fry in a pan with a splash of water.
+3. Add the noodles. Toss 1–2 minutes.

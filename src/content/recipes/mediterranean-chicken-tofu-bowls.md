@@ -70,49 +70,50 @@ reheat: Move a frozen dabba to the fridge the night before. Microwave covered 3�
 prep: mediterranean-bowls-week
 ---
 
-One oven at 425°F does almost all the work here: two trays of veg and chickpeas first, then the chicken and tofu together. The rice cooks on the stove while the oven runs.
+One oven at 425°F does most of the work. Veg roasts first, then chicken and tofu bake together. Rice cooks on the stove in the meantime.
 
-The full minute-by-minute order and the fridge/freezer plan are on the [Sunday prep page](/preps/mediterranean-bowls-week/).
+## Marinate
 
-## Marinate the protein
+1. Press the tofu under something heavy for 15 minutes.
+2. Whisk all the marinade ingredients together.
+3. Cut the chicken into 1-inch pieces. Cube the tofu (3/4 inch).
+4. Pour half the marinade over the chicken, half over the tofu.
+5. Rest 30 minutes. Chicken goes in the fridge.
 
-1. Wrap the tofu in a clean towel, put something heavy on it, and press for 15 minutes.
-2. Whisk the marinade: olive oil, lemon juice, garlic, oregano, paprika, cumin, salt and pepper.
-3. Cut the chicken into 1-inch pieces. Cube the tofu about 3/4 inch.
-4. Pour half the marinade over the chicken and half over the tofu. Toss gently and rest 30 minutes (chicken in the fridge).
+## Rice
 
-## Cook the rice
+1. **Brown rice:** rinse. Add 3 cups water and a pinch of salt. Boil, cover, lowest heat for 40 minutes. Rest 10 minutes.
+2. **Basmati:** rinse. Add 2 1/4 cups water and a pinch of salt. Boil, cover, lowest heat for 15 minutes. Rest 5 minutes.
+3. Fluff both. Spread on a tray to cool.
 
-1. **Brown rice:** rinse, then add 3 cups water and a pinch of salt. Boil, cover, and cook on the lowest heat for 40 minutes. Rest 10 minutes.
-2. **Basmati:** rinse until the water runs mostly clear. Add 2 1/4 cups water and a pinch of salt. Boil, cover, lowest heat for 15 minutes. Rest 5 minutes.
-3. Fluff both and spread them on a tray so they cool fast.
+## Roast veg and chickpeas
 
-## Roast the veg and chickpeas
+1. Heat the oven to 425°F.
+2. Cut the veg into 1-inch pieces.
+3. Toss with the chickpeas, 3 tbsp oil, and 1 tsp each salt, oregano and cumin.
+4. Spread over two lined trays. Don't crowd them.
+5. Roast 25–30 minutes. Stir once halfway.
 
-1. Cut everything to roughly 1-inch pieces so it cooks evenly.
-2. Toss with the chickpeas, 3 tbsp oil, and 1 tsp each salt, oregano and cumin.
-3. Spread in a single layer over two parchment-lined trays. Crowded veg steams instead of roasting, so use both.
-4. Roast at 425°F for 25–30 minutes, stirring once halfway. Done when the edges brown and the okra is tender.
+## Bake chicken and tofu
 
-## Bake the chicken and tofu
+1. Tofu on a lined sheet pan, chicken in a lined baking dish. Single layer.
+2. Bake together at 425°F for 20–25 minutes. Flip and swap racks halfway.
+3. Chicken is done at 165°F. Tofu is done when the edges are golden.
 
-1. Tofu goes on a parchment-lined metal sheet pan in a single layer.
-2. Chicken goes in a parchment-lined lasagna dish in a single layer. Move it out of the marinade bowl just before baking.
-3. Bake both at 425°F for 20–25 minutes. Flip and swap racks halfway.
-4. Chicken is done at 165°F in the thickest piece. Tofu is done when the edges are golden.
+## Sauces
 
-## Make the sauces
-
-1. **Tahini-lemon:** whisk the tahini, lemon juice, garlic and salt. It seizes up and gets thick first, then loosens as you whisk in cold water 1 tbsp at a time. Stop when it pours.
+1. **Tahini-lemon:** whisk tahini, lemon juice, garlic and salt. It gets thick first. Add cold water 1 tbsp at a time until it pours.
 2. **Sour cream:** stir everything together.
 
-## Pack
+## Pack 11 containers
 
-Per dabba: 3/4 cup rice (a mix of both), one portion of protein, about 1 cup veg and chickpeas, and sauce in a small separate container. Split each component into equal piles first, then assemble. The salad isn't packed; chop it the day you eat.
+1. Each container: 3/4 cup rice, one portion of protein, about 1 cup veg and chickpeas.
+2. Sauce goes in a small separate cup.
+3. Fridge: chicken for days 1–3, tofu for day 4. Everything else goes in the freezer.
+4. Make the salad fresh on the day you eat it.
 
-## Oven and pan notes
+## Good to know
 
-- Most parchment is rated to 420–450°F. Check the box, and trim it to fit the pan so the edges don't scorch.
-- Aluminum trays get flimsy when hot. Slide the rack out to lift them, and never carry them by the edge.
-- Don't put a cold glass or ceramic dish straight into a hot oven, and don't set a hot one on a wet surface.
-- Never microwave in the aluminum trays.
+- Check your parchment box. Most is fine up to 420–450°F.
+- Hot aluminum trays bend. Slide the rack out before lifting.
+- Never microwave in aluminum trays.

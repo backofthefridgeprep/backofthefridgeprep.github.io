@@ -3,13 +3,18 @@ import { Image } from 'astro:assets';
 import type { Recipe } from '../lib/content';
 import { formatMinutes, totalMinutes, dietLabel } from '../lib/content';
 import TestedStamp from './TestedStamp.astro';
+import { getPhoto } from '../lib/photos';
 
 interface Props { recipe: Recipe }
 const { recipe } = Astro.props;
 const d = recipe.data;
-const time = formatMinutes(totalMinutes(recipe));
+const photo = getPhoto(d.photo);
+const total = totalMinutes(recipe);
+const time = formatMinutes(total);
+const timeBucket = total === undefined ? '' : total <= 30 ? 'time:30' : total <= 60 ? 'time:60' : 'time:61';
 const diet = d.diet.filter((x) => x !== 'eggless').slice(0, 2);
-const filters = [...d.diet, ...d.cuisine.map((c) => `cuisine:${c}`), ...d.course.map((c) => `course:${c}`), d.storage?.freezer ? 'freezer' : ''].filter(Boolean).join(' ');
+// Recipe list filters: cuisine and total time only.
+const filters = [...d.cuisine.map((c) => `cuisine:${c.replace(/\s+/g, '_')}`), timeBucket].filter(Boolean).join(' ');
 const kicker = d.kind === 'technique' ? 'Technique' : d.course[0] ?? 'Recipe';
 // Placeholder tint rotates so a grid of photo-less cards doesn't look like one block.
 const tints = ['var(--saffron-soft)', 'var(--sage-soft)', 'var(--pop-soft)', 'var(--frost-soft)'];
@@ -19,8 +24,8 @@ const tint = tints[[...recipe.id].reduce((a, c) => a + c.charCodeAt(0), 0) % tin
 <a href={`/recipes/${recipe.id}/`} class="card" data-filters={filters}>
   <div class="media">
     {
-      d.image ? (
-        <Image src={d.image} alt={d.imageAlt ?? ''} widths={[400, 700]} sizes="(min-width: 760px) 360px, 100vw" class="photo" />
+      photo ? (
+        <Image src={photo} alt={d.imageAlt ?? ''} widths={[400, 700]} sizes="(min-width: 760px) 360px, 100vw" class="photo" />
       ) : (
         <div class="ph" style={`background:${tint}`} aria-hidden="true">
           <span class="ph-letter">{d.title[0]}</span>

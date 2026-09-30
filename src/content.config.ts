@@ -46,8 +46,7 @@ const nutrition = z.object({
 
 const recipes = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/recipes' }),
-  schema: ({ image }) =>
-    z
+  schema: z
       .object({
         title: z.string(),
         description: z.string(), // one or two sentences, used on cards and for SEO
@@ -92,8 +91,9 @@ const recipes = defineCollection({
 
         nutrition: nutrition.optional(),
 
-        // Own photos only. Put files in src/assets/photos/ and reference them relatively.
-        image: image().optional(),
+        // Own photos only. Drop the file in src/assets/photos/ and put just the file name here,
+        // e.g. photo: palak_paneer.jpg. If the file isn't there yet, the page shows a placeholder.
+        photo: z.string().optional(),
         imageAlt: z.string().optional(),
 
         source: z
@@ -110,7 +110,7 @@ const recipes = defineCollection({
         message: 'Published recipes need a `tested` block (date you cooked it). Add one, or set draft: true.',
         path: ['tested'],
       })
-      .refine((r) => !r.image || r.imageAlt, {
+      .refine((r) => !r.photo || r.imageAlt, {
         message: 'Add imageAlt describing the photo.',
         path: ['imageAlt'],
       }),
@@ -118,8 +118,7 @@ const recipes = defineCollection({
 
 const preps = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/preps' }),
-  schema: ({ image }) =>
-    z.object({
+  schema: z.object({
       title: z.string(),
       description: z.string(),
       date: z.coerce.date(), // the Sunday you cook
@@ -130,7 +129,7 @@ const preps = defineCollection({
       people: z.number().int().positive().optional(),
       activeTime: z.string(), // "about 3 hours"
 
-      image: image().optional(),
+      photo: z.string().optional(), // file name in src/assets/photos/
       imageAlt: z.string().optional(),
 
       recipes: z.array(reference('recipes')).default([]),

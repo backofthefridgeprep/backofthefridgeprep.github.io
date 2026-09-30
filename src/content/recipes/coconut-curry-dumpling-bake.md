@@ -4,7 +4,7 @@ description: Frozen dumplings baked straight into a coconut curry with broccoli,
 date: 2026-09-27
 tested:
   date: 2026-09-27
-image: ../../assets/photos/coconut-curry-dumpling-bake.jpg
+photo: coconut-curry-dumpling-bake.jpg
 imageAlt: Baked dumplings in coconut curry in a white ceramic dish, topped with sliced green onion
 cuisine: [Pan-Asian, Fusion]
 course: [main]
@@ -43,21 +43,21 @@ reheat: Microwave 2–3 min. Sprinkle a little water on the rice first.
 prep: sunday-prep-sept-28
 ---
 
-The trick is pressing frozen dumplings halfway into the sauce. The bottoms poach in the curry while the tops crisp up once the foil comes off.
+Frozen dumplings go straight into the sauce. The bottoms cook in the curry, and the tops crisp once the foil comes off.
 
-## Start the rice
+## Rice
 
-1. Rinse the rice 2–3 times until the water runs mostly clear.
-2. Add the rice, water and salt to a medium pot. Bring to a boil uncovered.
-3. Cover, turn to the lowest heat, and cook 15 minutes.
-4. Turn off the heat and leave it covered 10 minutes. Fluff with a fork.
+1. Rinse the rice 2–3 times.
+2. Add rice, water and salt to a pot. Bring to a boil.
+3. Cover, lowest heat, 15 minutes.
+4. Heat off. Leave covered 10 minutes, then fluff.
 
-## Build and bake
+## Dumpling bake
 
 1. Heat the oven to 400°F.
-2. In the 9x13 dish, whisk the coconut milk, broth, curry paste (or spices), soy sauce, sugar, salt, garlic and ginger.
-3. Stir in the broccoli, mushrooms, bell pepper and spinach.
-4. Lay the frozen dumplings on top in one layer, pressing them in so they're half submerged.
-5. Cover tightly with foil and bake 25 minutes.
-6. Uncover and bake 10 more minutes, until the tops take on a little color.
-7. Squeeze lime over it and serve with the rice.
+2. In the baking dish, whisk the coconut milk, broth, curry paste, soy sauce, sugar, salt, garlic and ginger.
+3. Stir in the broccoli, mushrooms, pepper and spinach.
+4. Lay the frozen dumplings on top in one layer. Press them halfway into the sauce.
+5. Cover tightly with foil. Bake 25 minutes.
+6. Uncover. Bake 10 more minutes.
+7. Squeeze lime over it. Serve with the rice.

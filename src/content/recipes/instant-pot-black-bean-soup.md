@@ -4,7 +4,7 @@ description: A thick tomato and black bean soup loaded with potato, zucchini, ca
 date: 2026-09-27
 tested:
   date: 2026-09-27
-image: ../../assets/photos/black-bean-soup.jpg
+photo: black-bean-soup.jpg
 imageAlt: Six bowls and containers of black bean vegetable soup topped with shredded cheddar
 cuisine: [American, Italian]
 course: [soup]
@@ -42,14 +42,18 @@ forLittleOnes: Scoop out a few soft potato and zucchini pieces for little ones b
 prep: sunday-prep-sept-28
 ---
 
-The one rule: pour the marinara on top and don't stir it in. Tomato sauce on the bottom of the pot is what sets off the burn warning.
+The one rule: pour the marinara on top and don't stir. Sauce on the bottom of the pot sets off the burn warning.
 
-1. Set the Instant Pot to Sauté. Heat the olive oil, cook the onion 3 minutes, then add the garlic for 30 seconds.
-2. Pour in 1 cup of the broth and scrape the bottom well.
-3. Add the potatoes, zucchini, cabbage, tomatoes, beans, seasonings, salt and the remaining 2 cups of broth. Stir.
-4. Pour the marinara on top. **Don't stir.** Stay under the max fill line.
-5. Lid on, valve to Sealing. Pressure cook on High for 8 minutes.
-6. Let it release naturally for 5 minutes, then quick release.
-7. Stir in the spinach until it wilts. Too thick? Add hot water. Taste for salt.
+1. Instant Pot on Sauté. Heat the oil. Cook the onion 3 minutes.
+2. Add garlic for 30 seconds.
+3. Pour in 1 cup of broth. Scrape the bottom well.
+4. Add potatoes, zucchini, cabbage, tomatoes, beans, seasonings, salt and the rest of the broth. Stir.
+5. Pour the marinara on top. **Don't stir.** Stay under the max line.
+6. Lid on, valve to Sealing. High pressure, 8 minutes.
+7. Natural release 5 minutes, then quick release.
+8. Stir in the spinach. Too thick? Add hot water. Taste for salt.
 
-On soup nights we make grilled cheese: butter the outside of two sourdough slices, cheese inside, medium-low pan with the lid on, about 3 minutes a side.
+## Grilled cheese on the side
+
+1. Butter the outside of two sourdough slices. Cheese inside.
+2. Medium-low pan, lid on, about 3 minutes a side.
