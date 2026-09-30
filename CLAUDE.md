@@ -29,8 +29,8 @@ Shreya is strong in Python/ML and newer to frontend. Explain frontend changes br
 
 ## Brand
 - Voice: first person, plain, warm, unfussy. Audience: busy working parents who prep once a week.
-- Palette (Sep 30): peach #fadfc8, apricot #f0cdb1, rose #efa49f, white, cocoa #6d4340. White page, cocoa text and bands, peach/rose as soft fills, a deeper rose (#b5524d, `--pop`) for buttons/links so text stays readable. Colors live at the top of `src/styles/global.css`. Fonts: Fraunces (display, italic "script" accents), Newsreader (body), Instrument Sans (labels).
-- Logo: text only — "BotF" monogram with a rose B, stacked "Back of / the Fridge" wordmark (weight 600). Favicon: cocoa B on a peach circle.
+- Palette (Sep 30): peach #fadfc8, apricot #f0cdb1, salmon #ef8a7f, white, cocoa #6d4340. **Salmon is the pop color**; brown stays in the background. Salmon fills (buttons, badges, step numbers) carry dark text (`--on-pop`); large salmon text uses `--accent-big` #e56b60; small salmon text/links use `--accent` #bb5047 so it stays readable. White page, cocoa body text, peach home band, softer brown footer (#835c56). Colors live at the top of `src/styles/global.css`. Fonts: Fraunces (display, italic "script" accents), Newsreader (body), Instrument Sans (labels).
+- Logo: text only — "BotF" monogram with a salmon B, stacked "Back of / the Fridge" wordmark (weight 600). Favicon: dark B on a salmon circle.
 - Email: backofthefridge.prep@gmail.com. Pinterest: https://www.pinterest.com/backofthefridgeprep/
 - Instagram is out of scope for now; Pinterest + LinkedIn build-in-public.
 
