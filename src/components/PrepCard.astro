@@ -13,7 +13,7 @@ const d = prep.data;
     <span class="unit">meals</span>
   </div>
   <div class="body">
-    <p class="eyebrow">Sunday prep · {formatDate(d.date)}{d.draft && ' · Draft'}</p>
+    <p class="eyebrow">Sunday prep · {formatDate(d.date)}{d.draft && ' · Draft'}{d.testing && ' · Testing'}</p>
     <h3>{d.title}</h3>
     <p class="desc">{d.description}</p>
     <p class="meta">{d.activeTime}{d.people && ` · ${d.people} people`} · {d.recipes.length} {d.recipes.length === 1 ? 'recipe' : 'recipes'}</p>

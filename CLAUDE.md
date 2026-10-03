@@ -5,6 +5,7 @@ Static Astro site at https://backofthefridgeprep.com (GitHub Pages, repo backoft
 
 ## The one rule
 Nothing is published until Shreya has cooked it. The schema enforces this: a recipe with `draft: false` must have a `tested:` block with the date she cooked it. Never add or change a `tested` date on her behalf; ask her. AI can suggest ideas and drafts; she cooks, fixes, photographs, then publishes.
+Exception she chose: `testing: true` puts a recipe or prep live before she's cooked it, so she can cook from the site. It's labeled "Testing — not cooked yet", gets no Tested stamp, and is `noindex` with no recipe structured data. When she's cooked it, replace `testing: true` with a `tested:` block (date from her).
 
 ## About the owner
 Shreya is strong in Python/ML and newer to frontend. Explain frontend changes briefly. Keep Python for data pipelines (PDF → recipe files, USDA nutrition estimates) in `scripts/` with its own `.venv`.
@@ -26,7 +27,7 @@ Shreya is strong in Python/ML and newer to frontend. Explain frontend changes br
 - Sunday preps: pop-color "Cook one day. Eat all week." banner. No day-by-day menu. `dishes` lists what the week holds with servings, split into "Eat first (within 3 days)" vs "Freezer-friendly" (derived from `recipes` if omitted). `plan` is sections (e.g. Afternoon, Evening) of steps; use `together:` for things that happen at the same time; `recipe:` on a step adds a chip that opens that recipe's ingredients and steps in a pop-up. Keep preps generic (no guest/festival framing).
 - Tips: `src/content/articles/<slug>.md` → /tips/. Shreya's personal experience and advice, in her voice. Don't invent experiences for her.
 - YAML: in `{ item: ..., note: ... }` flow style, quote any value containing a comma, or it silently splits.
-- `draft: true` keeps a file off the live site.
+- `draft: true` keeps a file off the live site. `testing: true` shows it live, labeled as not yet cooked.
 - Nutrition is always labeled "estimated" (USDA FoodData Central). No health claims; use careful wording like "lower in saturated fat". Footer has a "not medical advice" note.
 - Rewrite recipes adapted from others in her own words and credit them via `source`.
 - Tag cuisine on every recipe.
@@ -43,7 +44,7 @@ Shreya is strong in Python/ML and newer to frontend. Explain frontend changes br
 - Week 3: photos, Python nutrition script, more recipes.
 - Week 4: polish, real email signup (set `PUBLIC_SIGNUP_ACTION`), launch post.
 - Drafts waiting for amounts: Ganesh Chaturthi week prep, cauliflower chickpea tacos, yogurt-marinated chicken.
-- Drafts waiting to be cooked: baby week prep (`baby-week-prep`) and its five `baby-*` recipes, from Shreya's baby meal prep PDF.
+- Live as `testing: true`, waiting to be cooked: baby week prep (`baby-week-prep`) and its five `baby-*` recipes, from Shreya's baby meal prep PDF.
 - About page is a placeholder; Shreya will rewrite it.
 
 ## Workflow

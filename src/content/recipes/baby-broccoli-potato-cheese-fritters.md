@@ -2,7 +2,7 @@
 title: Broccoli-Potato-Cheese Fritters
 description: Soft, cheesy little fritters of mashed potato and steamed broccoli. Serve whole, or mash into dahi for babies who like a paste.
 date: 2026-10-03
-draft: true # TODO(Shreya): cook it, then add tested date + photo
+testing: true # live, labeled 'not cooked yet'. TODO(Shreya): after cooking, replace with tested: date + photo
 babyAge: 9 months+
 cuisine: [Indian]
 course: [side]

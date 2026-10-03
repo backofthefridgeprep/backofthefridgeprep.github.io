@@ -65,7 +65,7 @@ const jsonLd: Record<string, unknown> = {
 };
 ---
 
-<Base title={d.title} description={d.description} image={photo?.src} jsonLd={jsonLd}>
+<Base title={d.title} description={d.description} image={photo?.src} jsonLd={d.testing ? undefined : jsonLd} noindex={d.testing}>
   <article class="wrap recipe">
     <header class:list={['rhead', { 'has-photo': !!photo }]}>
       <div class="rhead-text">
@@ -73,7 +73,9 @@ const jsonLd: Record<string, unknown> = {
           {d.babyAge ? `Baby food · ${d.babyAge}` : d.kind === 'technique' ? 'Technique' : 'Recipe'}
           {d.cuisine.length > 0 && ` · ${d.cuisine.join(' · ')}`}
           {d.draft && ' · Draft (not published)'}
+          {d.testing && !d.tested && ' · Testing'}
         </p>
+        {d.testing && !d.tested && <p class="testing-note">Testing — I haven't cooked this one yet. It gets my Tested stamp once I have.</p>}
         <h1>{d.title}</h1>
         {
           facts.length > 0 && (
@@ -239,6 +241,7 @@ const jsonLd: Record<string, unknown> = {
   .facts div { padding: 12px 22px 12px 0; margin-right: 22px; }
   .facts dt { font-family: var(--ui); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
   .facts dd { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.15rem; }
+  .testing-note { display: inline-block; margin: 0 0 18px; padding: 6px 14px; border-radius: 999px; background: var(--saffron-soft); color: var(--ink-2); font-family: var(--ui); font-size: 0.86rem; }
   .snote { margin: 12px 0 0; color: var(--ink-3); font-size: 0.95rem; font-style: italic; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
   .wake[aria-pressed='true'] { background: var(--sage-soft); color: var(--sage); box-shadow: none; }

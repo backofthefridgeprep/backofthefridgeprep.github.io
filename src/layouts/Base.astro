@@ -8,9 +8,10 @@ interface Props {
   description?: string;
   image?: string; // absolute or root-relative URL for og:image (Pinterest uses it)
   jsonLd?: Record<string, unknown>;
+  noindex?: boolean; // keep this page out of Google (used for recipes still being tested)
 }
 
-const { title, description = site.tagline, image, jsonLd } = Astro.props;
+const { title, description = site.tagline, image, jsonLd, noindex = false } = Astro.props;
 const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site).toString() : undefined;
@@ -30,6 +31,7 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta name="author" content={site.author} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

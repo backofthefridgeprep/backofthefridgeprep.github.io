@@ -54,11 +54,11 @@ const shortName = (id?: string) => {
 const stationClass = (s?: string) => (s ? 's-' + s.toLowerCase().replace(/[^a-z]+/g, '') : '');
 ---
 
-<Base title={d.title} description={d.description}>
+<Base title={d.title} description={d.description} noindex={d.testing}>
   <PrepBanner />
   <article class="wrap">
     <header class="phead">
-      <p class="eyebrow">Sunday prep · {formatDate(d.date)}{d.draft && ' · Draft (not published)'}</p>
+      <p class="eyebrow">Sunday prep · {formatDate(d.date)}{d.draft && ' · Draft (not published)'}{d.testing && ' · Testing, not cooked yet'}</p>
       <h1>{d.title}</h1>
       <p class="lede">{d.description}</p>
       <dl class="facts">

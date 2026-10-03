@@ -2,7 +2,7 @@
 title: Baby's Week of Meals
 description: "Egg-oat porridge, veg khichdi and two kinds of fritters: one session, Monday to Friday breakfast, lunch and early dinner for a baby 9 months and up."
 date: 2026-10-04
-draft: true # TODO(Shreya): cook it, then publish with the five recipes
+testing: true # live, labeled 'not cooked yet'. TODO(Shreya): remove this line after cooking the full session
 tags: [baby, freezer-friendly, 9-months-plus]
 containers: 15
 activeTime: about 1.5–2 hours

@@ -2,7 +2,7 @@
 title: Egg-Oat Porridge
 description: Creamy oats cooked in whole milk with eggs and extra yolks stirred through. A filling, protein-rich breakfast for babies 9 months and up.
 date: 2026-10-03
-draft: true # TODO(Shreya): cook it, then add tested date + photo
+testing: true # live, labeled 'not cooked yet'. TODO(Shreya): after cooking, replace with tested: date + photo
 babyAge: 9 months+
 cuisine: [Indian]
 course: [main]

@@ -34,6 +34,7 @@ const tint = index % 2 === 0 ? 'var(--saffron-soft)' : 'var(--pop-soft)';
       )
     }
     {d.draft && <span class="chip pop draft">Draft</span>}
+    {!d.draft && d.testing && !d.tested && <span class="chip pop draft">Testing</span>}
   </div>
   <div class="body">
     <p class="eyebrow">{kicker}{!d.babyAge && d.cuisine.length > 0 && ` · ${d.cuisine.join(' · ')}`}</p>

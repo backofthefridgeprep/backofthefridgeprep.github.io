@@ -2,7 +2,7 @@
 title: Veg Khichdi with Peas
 description: A thick moong dal and rice khichdi with carrot, broccoli, pumpkin, peas and spinach. No salt; jeera, hing and haldi carry the flavour.
 date: 2026-10-03
-draft: true # TODO(Shreya): cook it, then add tested date + photo
+testing: true # live, labeled 'not cooked yet'. TODO(Shreya): after cooking, replace with tested: date + photo
 babyAge: 9 months+
 cuisine: [Indian]
 course: [main]

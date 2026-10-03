@@ -2,7 +2,7 @@
 title: Fruit Purée Cubes
 description: Pear, mango and prune purées frozen in small cubes, so baby's porridge or dahi gets a different fruit each day.
 date: 2026-10-03
-draft: true # TODO(Shreya): cook it, then add tested date + photo
+testing: true # live, labeled 'not cooked yet'. TODO(Shreya): after cooking, replace with tested: date + photo
 kind: technique
 babyAge: 9 months+
 cuisine: [Indian]

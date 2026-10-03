@@ -2,7 +2,7 @@
 title: Tofu, Red Pepper & Zucchini Fritters
 description: Soft, protein-rich fritters of crumbled tofu, squeezed zucchini and red pepper. Squeezing the zucchini well is what holds them together.
 date: 2026-10-03
-draft: true # TODO(Shreya): cook it, then add tested date + photo
+testing: true # live, labeled 'not cooked yet'. TODO(Shreya): after cooking, replace with tested: date + photo
 babyAge: 9 months+
 cuisine: [Indian]
 course: [side]

@@ -6,7 +6,8 @@
 //             and where each container goes (fridge vs freezer).
 //
 // The house rule is enforced here: a recipe can't be published (draft: false)
-// unless it has a `tested` block, i.e. Shreya has cooked it herself.
+// unless it has a `tested` block, i.e. Shreya has cooked it herself, or is marked
+// `testing: true` (live, clearly labeled "not cooked yet", hidden from search engines).
 //
 // Keep the frontmatter structured and boring: this is the data the
 // "reverse recipe" agent will read later.
@@ -55,6 +56,9 @@ const recipes = defineCollection({
         description: z.string(), // one or two sentences, used on cards and for SEO
         date: z.coerce.date(),
         draft: z.boolean().default(false),
+        // Live on the site so Shreya can cook from it, but labeled "Testing — not cooked yet",
+        // no Tested stamp, and hidden from Google. Swap for a `tested` block once she's cooked it.
+        testing: z.boolean().default(false),
         kind: z.enum(['recipe', 'technique']).default('recipe'),
 
         // "Cooked and tested by Shreya" stamp. Required to publish.
@@ -112,8 +116,8 @@ const recipes = defineCollection({
 
         prep: reference('preps').optional(), // the Sunday prep this came from
       })
-      .refine((r) => r.draft || r.tested, {
-        message: 'Published recipes need a `tested` block (date you cooked it). Add one, or set draft: true.',
+      .refine((r) => r.draft || r.tested || r.testing, {
+        message: 'Published recipes need a `tested` block (date you cooked it). Add one, or set draft: true or testing: true.',
         path: ['tested'],
       })
       .refine((r) => !r.photo || r.imageAlt, {
@@ -137,6 +141,7 @@ const preps = defineCollection({
     description: z.string(),
     date: z.coerce.date(), // the Sunday you cook
     draft: z.boolean().default(false),
+    testing: z.boolean().default(false), // live but labeled "not cooked yet" (see recipes)
     tags: z.array(z.string()).default([]),
 
     containers: z.number().int().positive(), // total containers / meals
