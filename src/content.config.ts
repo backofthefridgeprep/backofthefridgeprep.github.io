@@ -91,6 +91,9 @@ const recipes = defineCollection({
           .optional(),
         reheat: z.string().optional(),
         forLittleOnes: z.string().optional(), // what to set aside for toddlers before seasoning
+        // Set only on baby-food recipes, e.g. "9 months+". Puts the recipe under the
+        // "Baby food" filter and shows the baby safety notes on its page.
+        babyAge: z.string().optional(),
 
         nutrition: nutrition.optional(),
 

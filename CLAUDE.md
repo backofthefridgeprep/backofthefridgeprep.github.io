@@ -21,7 +21,8 @@ Shreya is strong in Python/ML and newer to frontend. Explain frontend changes br
 - Recipe steps: short, plain sentences, one action per step, and self-contained (no "see the prep page"). Use `## Group` headings only when a recipe has more than one part.
 - Recipe page is built for cooking and shopping: no description or diet tags up top; ingredients grouped by shopping aisle (veggies, protein, grains, spices, pantry, frozen — auto-guessed in `src/lib/aisles.ts`, override with `aisle:` on an ingredient); tap an item or step to cross it off (no checkboxes); "For little ones" sits at the top of the steps; keep-screen-on button. Keep it simple.
 - Storing and reheating is a standard labeled table (`src/components/StorageTable.astro`) built from `storage` + `reheat`. Keep `reheat` and `storage.notes` short phrases, not paragraphs.
-- Recipe list: photos first; filters are cuisine, total time, and storage (freezes / fridge only). Cards show no description or diet chips.
+- Recipe list: photos first; filters are cuisine, total time, storage (freezes / fridge only), and "Who it's for" (shown only when a baby recipe exists; `/recipes/?for=baby` opens it pre-filtered). Cards show no description or diet chips.
+- Baby food: set `babyAge: 9 months+` on the recipe. That labels it "Baby food", puts it under the Baby filter, and adds a short safety box above the steps. No salt/sugar/honey in these recipes. Slugs start with `baby-`.
 - Sunday preps: pop-color "Cook one day. Eat all week." banner. No day-by-day menu. `dishes` lists what the week holds with servings, split into "Eat first (within 3 days)" vs "Freezer-friendly" (derived from `recipes` if omitted). `plan` is sections (e.g. Afternoon, Evening) of steps; use `together:` for things that happen at the same time; `recipe:` on a step adds a chip that opens that recipe's ingredients and steps in a pop-up. Keep preps generic (no guest/festival framing).
 - Tips: `src/content/articles/<slug>.md` → /tips/. Shreya's personal experience and advice, in her voice. Don't invent experiences for her.
 - YAML: in `{ item: ..., note: ... }` flow style, quote any value containing a comma, or it silently splits.
@@ -42,6 +43,7 @@ Shreya is strong in Python/ML and newer to frontend. Explain frontend changes br
 - Week 3: photos, Python nutrition script, more recipes.
 - Week 4: polish, real email signup (set `PUBLIC_SIGNUP_ACTION`), launch post.
 - Drafts waiting for amounts: Ganesh Chaturthi week prep, cauliflower chickpea tacos, yogurt-marinated chicken.
+- Drafts waiting to be cooked: baby week prep (`baby-week-prep`) and its five `baby-*` recipes, from Shreya's baby meal prep PDF.
 - About page is a placeholder; Shreya will rewrite it.
 
 ## Workflow

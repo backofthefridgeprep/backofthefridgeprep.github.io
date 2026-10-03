@@ -70,7 +70,7 @@ const jsonLd: Record<string, unknown> = {
     <header class:list={['rhead', { 'has-photo': !!photo }]}>
       <div class="rhead-text">
         <p class="eyebrow">
-          {d.kind === 'technique' ? 'Technique' : 'Recipe'}
+          {d.babyAge ? `Baby food · ${d.babyAge}` : d.kind === 'technique' ? 'Technique' : 'Recipe'}
           {d.cuisine.length > 0 && ` · ${d.cuisine.join(' · ')}`}
           {d.draft && ' · Draft (not published)'}
         </p>
@@ -138,6 +138,20 @@ const jsonLd: Record<string, unknown> = {
         <h2 id="steps-h">{d.kind === 'technique' ? 'How to' : 'Steps'}</h2>
         <p class="hint">Tap a step when it's done.</p>
       </div>
+      {
+        d.babyAge && (
+          <aside class="little">
+            <p class="little-h">Before you feed baby</p>
+            <ul>
+              <li>Made for babies {d.babyAge}. Introduce new foods (especially egg, dairy and soy) one at a time, a few days apart.</li>
+              <li>No salt, sugar or honey before 12 months.</li>
+              <li>Cool to warm and test the temperature before serving.</li>
+              <li>Throw away what's left in the bowl once a spoon has been in it.</li>
+              <li>Check with your pediatrician about your baby's needs.</li>
+            </ul>
+          </aside>
+        )
+      }
       {
         d.forLittleOnes && (
           <aside class="little">
@@ -245,6 +259,8 @@ const jsonLd: Record<string, unknown> = {
   .little { margin: 0 0 24px; padding: 16px 20px; background: var(--saffron-soft); border-left: 3px solid var(--saffron); border-radius: 0 var(--radius) var(--radius) 0; }
   .little-h { margin: 0 0 4px; font-family: var(--ui); font-size: 0.74rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--saffron); }
   .little p:last-child { margin: 0; font-size: 1.08rem; }
+  .little ul { margin: 0; padding-left: 1.2em; font-size: 1.02rem; }
+  .little li { margin-bottom: 0.25em; }
   .steps-body :global(> p) { font-size: 1.12rem; color: var(--ink-2); font-style: italic; }
   .steps-body :global(h2) { font-family: var(--ui); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pop); margin: 34px 0 10px; }
   .steps-body :global(ol) { list-style: none; padding: 0; margin: 0; counter-reset: step; }

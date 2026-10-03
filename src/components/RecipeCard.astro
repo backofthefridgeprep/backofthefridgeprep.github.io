@@ -13,9 +13,10 @@ const total = totalMinutes(recipe);
 const time = formatMinutes(total);
 const timeBucket = total === undefined ? '' : total <= 30 ? 'time:30' : total <= 60 ? 'time:60' : 'time:61';
 const store = d.storage?.freezer ? 'store:freezer' : 'store:fridge';
-// Recipe list filters: cuisine, total time, fridge vs freezer.
-const filters = [...d.cuisine.map((c) => `cuisine:${c.replace(/\s+/g, '_')}`), timeBucket, store].filter(Boolean).join(' ');
-const kicker = d.kind === 'technique' ? 'Technique' : d.course[0] ?? 'Recipe';
+const who = d.babyAge ? 'for:baby' : 'for:everyone';
+// Recipe list filters: cuisine, total time, fridge vs freezer, who it's for.
+const filters = [...d.cuisine.map((c) => `cuisine:${c.replace(/\s+/g, '_')}`), timeBucket, store, who].filter(Boolean).join(' ');
+const kicker = d.babyAge ? `Baby food · ${d.babyAge}` : d.kind === 'technique' ? 'Technique' : d.course[0] ?? 'Recipe';
 // Photo-less cards alternate between two warm tints.
 const tint = index % 2 === 0 ? 'var(--saffron-soft)' : 'var(--pop-soft)';
 ---
@@ -35,7 +36,7 @@ const tint = index % 2 === 0 ? 'var(--saffron-soft)' : 'var(--pop-soft)';
     {d.draft && <span class="chip pop draft">Draft</span>}
   </div>
   <div class="body">
-    <p class="eyebrow">{kicker}{d.cuisine.length > 0 && ` · ${d.cuisine.join(' · ')}`}</p>
+    <p class="eyebrow">{kicker}{!d.babyAge && d.cuisine.length > 0 && ` · ${d.cuisine.join(' · ')}`}</p>
     <h3>{d.title}</h3>
     <div class="meta">
       {d.tested && <TestedStamp date={d.tested.date} by={d.tested.by} size="sm" />}

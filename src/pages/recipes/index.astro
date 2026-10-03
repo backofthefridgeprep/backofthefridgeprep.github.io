@@ -8,6 +8,7 @@ import { getPhoto } from '../../lib/photos';
 const recipes = (await getRecipes()).sort((a, b) => Number(!!getPhoto(b.data.photo)) - Number(!!getPhoto(a.data.photo)));
 const hasFreezer = recipes.some((r) => r.data.storage?.freezer);
 const hasFridge = recipes.some((r) => !r.data.storage?.freezer);
+const hasBaby = recipes.some((r) => r.data.babyAge);
 
 const cuisines = [...new Set(recipes.flatMap((r) => r.data.cuisine))].sort();
 const times = recipes.map(totalMinutes).filter((t): t is number => t !== undefined);
@@ -49,6 +50,18 @@ const timeOptions = [
           {hasFridge && <option value="store:fridge">Fridge only (eat in 2–4 days)</option>}
         </select>
       </label>
+      {
+        hasBaby && (
+          <label>
+            <span class="fname">Who it's for</span>
+            <select id="f-who">
+              <option value="">Everyone</option>
+              <option value="for:everyone">Grown-ups and kids</option>
+              <option value="for:baby">Baby food</option>
+            </select>
+          </label>
+        )
+      }
       <button type="button" class="clear" hidden>Clear</button>
     </div>
 
@@ -63,12 +76,14 @@ const timeOptions = [
   const cuisine = document.querySelector<HTMLSelectElement>('#f-cuisine')!;
   const time = document.querySelector<HTMLSelectElement>('#f-time')!;
   const store = document.querySelector<HTMLSelectElement>('#f-store')!;
+  // Only on the page when at least one baby-food recipe exists.
+  const who = document.querySelector<HTMLSelectElement>('#f-who');
   const cards = [...document.querySelectorAll<HTMLElement>('#recipe-grid > [data-filters]')];
   const clear = document.querySelector<HTMLButtonElement>('.clear')!;
   const empty = document.querySelector<HTMLElement>('.empty')!;
 
   function apply() {
-    const active = [cuisine.value, time.value, store.value].filter(Boolean);
+    const active = [cuisine.value, time.value, store.value, who?.value ?? ''].filter(Boolean);
     let shown = 0;
     for (const card of cards) {
       const tags = (card.dataset.filters ?? '').split(' ');
@@ -80,13 +95,21 @@ const timeOptions = [
     empty.hidden = shown > 0;
   }
 
+  // A link like /recipes/?for=baby opens with the Baby food filter on.
+  if (who && new URLSearchParams(location.search).get('for') === 'baby') {
+    who.value = 'for:baby';
+    apply();
+  }
+
   cuisine.addEventListener('change', apply);
   time.addEventListener('change', apply);
   store.addEventListener('change', apply);
+  who?.addEventListener('change', apply);
   clear.addEventListener('click', () => {
     cuisine.value = '';
     time.value = '';
     store.value = '';
+    if (who) who.value = '';
     apply();
   });
 </script>
