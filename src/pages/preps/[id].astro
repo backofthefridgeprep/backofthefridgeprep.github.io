@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import RecipeCard from '../../components/RecipeCard.astro';
 import PrepBanner from '../../components/PrepBanner.astro';
@@ -6,6 +7,7 @@ import ShoppingList from '../../components/ShoppingList.astro';
 import { render, getEntries } from 'astro:content';
 import { getPreps, formatDate } from '../../lib/content';
 import type { Prep, Recipe } from '../../lib/content';
+import { getPhoto } from '../../lib/photos';
 
 export async function getStaticPaths() {
   const preps = await getPreps();
@@ -16,6 +18,7 @@ interface Props { prep: Prep }
 const { prep } = Astro.props;
 const d = prep.data;
 const { Content } = await render(prep);
+const photo = getPhoto(d.photo);
 const visible = (r: Recipe) => import.meta.env.DEV || !r.data.draft;
 const recipes = (await getEntries(d.recipes)).filter(visible);
 
@@ -54,7 +57,7 @@ const shortName = (id?: string) => {
 const stationClass = (s?: string) => (s ? 's-' + s.toLowerCase().replace(/[^a-z]+/g, '') : '');
 ---
 
-<Base title={d.title} description={d.description} noindex={d.testing}>
+<Base title={d.title} description={d.description} image={photo?.src} noindex={d.testing}>
   <PrepBanner />
   <article class="wrap">
     <header class="phead">
@@ -66,6 +69,7 @@ const stationClass = (s?: string) => (s ? 's-' + s.toLowerCase().replace(/[^a-z]
         {d.people && <div><dt>People</dt><dd>{d.people}</dd></div>}
         <div><dt>Hands-on</dt><dd>{d.activeTime}</dd></div>
       </dl>
+      {photo && <Image src={photo} alt={d.imageAlt ?? ''} widths={[600, 1000, 1400]} sizes="(min-width: 900px) 760px, 100vw" class="pphoto" loading="eager" />}
     </header>
 
     {
@@ -220,6 +224,7 @@ const stationClass = (s?: string) => (s ? 's-' + s.toLowerCase().replace(/[^a-z]
 
 <style>
   .phead { padding: 40px 0 8px; max-width: 48em; }
+  .phead :global(.pphoto) { display: block; width: 100%; max-height: 520px; object-fit: cover; border-radius: var(--radius); margin-top: 28px; }
   .facts { display: flex; flex-wrap: wrap; margin: 20px 0 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); width: fit-content; max-width: 100%; }
   .facts div { padding: 12px 24px 12px 0; margin-right: 24px; }
   .facts dt { font-family: var(--ui); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }

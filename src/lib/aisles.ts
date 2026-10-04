@@ -21,12 +21,12 @@ const order: Aisle[] = ['veggies', 'protein', 'grains', 'spices', 'pantry', 'fro
 // First match wins, so the order of these rules matters.
 const rules: [Aisle, RegExp][] = [
   ['frozen', /frozen dumpling|edamame/],
-  ['pantry', /coconut milk|broth|rice vinegar|marinara|curry paste|prune/],
-  ['grains', /\brice\b|noodle|pasta|sourdough|bread|chapati|roti|flour|oats|quinoa|chickpea|black beans|kidney beans|lentil|\bdal\b/],
-  ['protein', /chicken|tofu|paneer|shrimp|fish|\beggs?\b|sour cream|\bcream\b|yogurt|\bmilk\b|cheese|butter/],
-  ['spices', /\bsalt\b|black pepper|oregano|paprika|cumin|coriander powder|turmeric|chili powder|chili flakes|garam masala|kasuri methi|mustard seeds|\bhing\b|asafoetida|italian seasoning|\bdill\b|curry powder|cinnamon|cardamom|elaichi|haldi|jeera/],
+  ['pantry', /coconut milk|broth|rice vinegar|marinara|curry paste|prune|tomato paste|sun-dried|adobo|hot sauce|chili crisp|doubanjiang|mayo|almond/],
+  ['grains', /\brice\b|noodle|pasta|sourdough|bread|chapati|roti|flour|oats|quinoa|chickpea|black beans|kidney beans|lentil|\bdal\b|spaghetti|rigatoni|tortilla/],
+  ['protein', /chicken|tofu|paneer|shrimp|fish|\beggs?\b|sour cream|\bcream\b|yogurt|\bmilk\b|cheese|butter|half-and-half|parmesan|mozzarella|monterey jack/],
+  ['spices', /\bsalt\b|black pepper|oregano|paprika|cumin|coriander powder|turmeric|chili powder|chili flakes|garam masala|kasuri methi|mustard seeds|\bhing\b|asafoetida|italian seasoning|\bdill\b|curry powder|cinnamon|cardamom|elaichi|haldi|jeera|garlic powder|onion powder|pepper flakes|bay lea/],
   ['pantry', /\boil\b|ghee|tahini|soy sauce|vinegar|sugar|honey|cornstarch|sriracha|water/],
-  ['veggies', /lemon|lime|garlic|ginger|onion|tomato|pepper|okra|eggplant|broccoli|mushroom|spinach|cabbage|potato|zucchini|lettuce|chilies|chili\b|cilantro|carrot|cauliflower|cucumber|peas|herbs|mint|\bpears?\b|mango|pumpkin/],
+  ['veggies', /lemon|lime|garlic|ginger|onion|tomato|pepper|okra|eggplant|broccoli|mushroom|spinach|cabbage|potato|zucchini|lettuce|chilies|chili\b|cilantro|carrot|cauliflower|cucumber|peas|herbs|mint|\bpears?\b|mango|pumpkin|avocado|jalape|basil|shallot/],
 ];
 
 export function guessAisle(item: string): Aisle {

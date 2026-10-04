@@ -43,7 +43,7 @@ Shreya is strong in Python/ML and newer to frontend. Explain frontend changes br
 - Week 1–2: schema, PDF conversion, Astro setup, deploy.
 - Week 3: photos, Python nutrition script, more recipes.
 - Week 4: polish, real email signup (set `PUBLIC_SIGNUP_ACTION`), launch post.
-- Drafts waiting for amounts: Ganesh Chaturthi week prep, cauliflower chickpea tacos, yogurt-marinated chicken.
+- Drafts waiting for amounts: Ganesh Chaturthi week prep, yogurt-marinated chicken.
 - Live as `testing: true`, waiting to be cooked: baby week prep (`baby-week-prep`) and its five `baby-*` recipes, from Shreya's baby meal prep PDF.
 - About page is a placeholder; Shreya will rewrite it.
 
